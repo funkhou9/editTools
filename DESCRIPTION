@@ -1,0 +1,9 @@
+Package: ErnstEditTools
+Title: R Package for RNA editing analysis
+Version: 0.0.0.9000
+Author: Scott Funkhouser <sfunkhouser@gmail.com>
+Maintainer: Scott Funkhouser <sfunkhouser@gmail.com>
+Description: Scans bcftools output for candidate RNA editing sites.
+Depends: R (>= 3.2.0)
+License: FREE
+LazyData: true
