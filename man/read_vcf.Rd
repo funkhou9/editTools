@@ -11,13 +11,14 @@ read_vcf(filename, NS, names = NULL)
 
 \item{NS}{The number of samples included in the .vcf file}
 
-\item{names}{Vector of names that will be used to reference each sample.
+\item{names}{character vector of names that will be used to reference each sample.
 Specify in the order that the samples appear in the file.}
 }
 \value{
 An object of class vcf
 }
 \description{
-Read in .vcf files
+Initializes a vcf object for use in editTools methods
+Currently, only works with 2-sample VCF files
 }
 
