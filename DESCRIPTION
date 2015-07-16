@@ -1,4 +1,4 @@
-Package: ErnstEditTools
+Package: editTools
 Title: R Package for RNA editing analysis
 Version: 0.0.0.9000
 Author: Scott Funkhouser <sfunkhouser@gmail.com>
