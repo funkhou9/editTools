@@ -5,5 +5,7 @@ Author: Scott Funkhouser <sfunkhouser@gmail.com>
 Maintainer: Scott Funkhouser <sfunkhouser@gmail.com>
 Description: Scans bcftools output for candidate RNA editing sites.
 Depends: R (>= 3.2.0)
-License: FREE
+License: MIT + file LICENSE
 LazyData: true
+Suggests: testthat
+Imports: dplyr
