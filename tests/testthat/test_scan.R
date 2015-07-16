@@ -1,4 +1,4 @@
-library(ErnstEditTools)
+library(editTools)
 context("Test the scanning for edits - one step at a time")
 
 LD_plus <- read_vcf("LD_plus_sample.vcf.gz", 2, c("DNA", "RNA"))

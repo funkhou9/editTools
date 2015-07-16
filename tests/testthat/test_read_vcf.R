@@ -1,4 +1,4 @@
-library(ErnstEditTools)
+library(editTools)
 context("Test the ability to read in vcf files with read_vcf()")
 
 test_that("read_vcf() returns vcf class", {

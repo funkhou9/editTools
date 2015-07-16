@@ -1,4 +1,4 @@
 library(testthat)
-library(ErnstEditTools)
+library(editTools)
 
-test_check("ErnstEditTools")
+test_check("editTools")
