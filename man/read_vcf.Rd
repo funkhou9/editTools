@@ -4,12 +4,10 @@
 \alias{read_vcf}
 \title{Read in .vcf files}
 \usage{
-read_vcf(filename, NS, names = NULL)
+read_vcf(filename, names = NULL)
 }
 \arguments{
 \item{filename}{The filename of the .vcf file}
-
-\item{NS}{The number of samples included in the .vcf file}
 
 \item{names}{character vector of names that will be used to reference each sample.
 Specify in the order that the samples appear in the file.}

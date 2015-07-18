@@ -1,14 +1,10 @@
-# Indexes genotypes
-#
-# @param x a single genotype - "0/0", "0/1" or "1/1"
-# @return index {1, 2, NA} corresponding to genotype
+# @param x a vector of genotypes - assumes x {"0/0", "0/1", "1/1"}
+# @return a vector of genotype indexes {1, 2}
 index_geno <- function(x) {
-#   if (x == "0/0") return(1)
-#   if (x == "1/1") return(2)
-#   if (x == "0/1") return(2) else return(NA)
-  x <- switch(x,
-              "0/0" = 1,
-              "0/1" = 2,
-              "1/1" = 2)
-
+  
+  # Homozygous reference (0/0) get 1 coding
+  #   Others  (0/1, 1/1) get 2 coding
+  idx_geno <- c(1, 2)[(x == "1/1") + 1]
+  
+  return (idx_geno)
 }

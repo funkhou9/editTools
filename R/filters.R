@@ -7,7 +7,7 @@
 # @param n sample name or number
 # @param geno specify what genotype to filer - 0/0 1/1 or 0/1
 # @return filtered vcf object
-#' @export
+# @export
 gt_filter <- function(obj, n, geno, remove = FALSE) {
   
   # Get genotype
@@ -28,7 +28,7 @@ gt_filter <- function(obj, n, geno, remove = FALSE) {
 #
 # @param obj vcf object
 # @return filtered vcf object
-#' @export
+# @export
 gt_diff_filter <- function(obj) {
   
   # Get 'genotype' call for both DNA and RNA
@@ -46,7 +46,7 @@ gt_diff_filter <- function(obj) {
 #
 # @param obj vcf object
 # @return filtered vcf object
-#' @export
+# @export
 indel_filter <- function(obj) {
   
   # Both REF and ALT columns need to be just 1 char in length
@@ -63,7 +63,7 @@ indel_filter <- function(obj) {
 # @param obj vcf object
 # @param qual quality threshold
 # @return filtered vcf object
-#' @export
+# @export
 qual_filter <- function(obj, qual) {
   
   # A simple quality filter that can be placed on the QUAL column
@@ -77,19 +77,22 @@ qual_filter <- function(obj, qual) {
 # @param obj vcf object
 # @param depth the required depth of RNA in support of a mismatch
 # @return filtered vcf object
-#' @export
+# @export
 edit_depth_filter <- function(obj, depth) {
   
-  
+  # Get vector of genotypes
   gt <- as.character(samples(obj, "DNA")[[1]][, "GT"])
   
+  # Get RNA total depth and variant depth - ensure numeric
   depedit <- samples(obj, "RNA")[[1]][, c("DP", "DV")]
   depedit <- sapply(depedit, function(x) as.numeric(as.character(x)))
+  
+  # Convert total depth to reference depth
   depedit <- cbind(DV = depedit[, "DV"],
-                   DR = depedit[, "DP"] - depedit[,"DV"])
+                   DR = depedit[, "DP"] - depedit[, "DV"])
   
   # building matrix j to index depedit with
-  j <- sapply(gt, index_geno)
+  j <- index_geno(gt)
   j <- as.matrix(cbind(seq_along(j), j))
   rownames(j) <- NULL
   colnames(j) <- NULL
@@ -97,13 +100,13 @@ edit_depth_filter <- function(obj, depth) {
   # index RNA calls based on DNA
   sampledepth <- depedit[j]
   i <- sampledepth >= depth
-  return(obj[i,])
-} 
+  return(obj[i, ])
+}
 
 
 # @param obj vcf object
 # @return filtered vcf object
-#' @export
+# @export
 dp_filter <- function(obj, n, depth, depthv = FALSE) {
   #Minimum depth filter
   #At moment, must specify a single sample and depth filtering
@@ -120,7 +123,7 @@ dp_filter <- function(obj, n, depth, depthv = FALSE) {
 
 # @param obj vcf object
 # @return filtered vcf object
-#' @export
+# @export
 hom_filter <- function(obj, n, perc = 95) {
   #Filters snps - a snp must be perc or 1-perc percent homozygous variant based on read counts
   #Must provide a single sample with <n> (order or name)

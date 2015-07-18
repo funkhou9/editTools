@@ -4,16 +4,17 @@
 #' Currently, only works with 2-sample VCF files
 #' 
 #' @param filename The filename of the .vcf file
-#' @param NS The number of samples included in the .vcf file
 #' @param names character vector of names that will be used to reference each sample. 
 #' Specify in the order that the samples appear in the file.
 #' @return An object of class vcf
 #' @export
-read_vcf <- function(filename, NS, names = NULL) {
+read_vcf <- function(filename, names = NULL) {
   
   # Only handles smaller files (-v option to only report variants)
-  bcf <- read.table(filename, header=F, sep='\t')
-  
+  bcf <- read.table(filename,
+                    header = FALSE,
+                    sep = '\t')
+   
   # 'SNP info' (not sample specific) stored in first 8 columns
   snps <- bcf[, 1:8]
   colnames(snps) <- c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
@@ -32,7 +33,8 @@ read_vcf <- function(filename, NS, names = NULL) {
   #   df of SNP information. The second is a list of 2
   #   (number of samples), each a data.frame with
   #   sample specific information formatted to "format"
-  result <- list(SNPs = snps, Samples = samples)
+  result <- list("SNPs" = snps,
+                 "Samples" = samples)
   class(result) <- "vcf"
   return(result)
 }

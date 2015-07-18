@@ -1,6 +1,6 @@
 Package: editTools
 Title: R Package for RNA editing analysis
-Version: 0.0.0.9000
+Version: 1.0
 Author: Scott Funkhouser <sfunkhouser@gmail.com>
 Maintainer: Scott Funkhouser <sfunkhouser@gmail.com>
 Description: Scans bcftools output for candidate RNA editing sites.

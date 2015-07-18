@@ -6,7 +6,7 @@
 # @param obj vcf object
 # @param number of samples in vcf file (required)
 # @return Mismatch results!
-#' @export
+# @export
 call_geno <- function(obj, NS) {
   
   # Merging sample calls to compare
@@ -15,26 +15,58 @@ call_geno <- function(obj, NS) {
   # Extract reference and alternative calls
   geno <- snps(obj)[, c("REF", "ALT")]
 
-  # Index edits. Use to prepare a matrix for use in indexing
-  i <- apply(calls, 1, index_edit)
+  # Index DNA genotypes and prepare for use in matrix indexing
+  idx_dna <- index_geno(as.character(calls[, 1]))
   
-  idf <- data.frame(matrix(unlist(i), ncol = NS, byrow = TRUE))
+  # For each locus at a time, evaluate rna index according to
+  #   dna index
+  # MIGHT BE ABLE TO CHANGE THIS STEP TO ACCOMODATE MORE SAMPLES
+  idx_rna <- mapply(index_rna,
+                    as.character(calls[, 2]),
+                    idx_dna)
   
+  # Prepare each index to be used as an index
+  idx_dna <- cbind(seq_along(idx_dna), idx_dna)
+  idx_rna <- cbind(seq_along(idx_rna), idx_rna)
   
-  mat <- lapply(idf, function(x) cbind(seq_along(x), x))
-  genocalls <- lapply(mat, function(x){geno[x]})
-  genocalls <- data.frame(matrix(unname(unlist(genocalls)), ncol=NS))
+  # Obtain DNA and RNA calls using indexes and merge
+  dna_calls <- geno[idx_dna]
+  rna_calls <- geno[idx_rna]
   
+  dna_rna_calls <- cbind(dna_calls, rna_calls)
   
+  # Give results names of samples - i.e. "DNA", "RNA"
+  colnames(dna_rna_calls) <- names(samples(obj))
+
+  # Reformat to include additional information from "snp" and
+  #   "sample" fields
+  dna_rna_calls <- cbind(snps(obj)[, c("CHROM", "POS")],
+                         dna_rna_calls,
+                         sample_merge(obj, NS, 1:4))
   
-  names(genocalls) <- names(samples(obj))
-  genocalls <- cbind(snps(obj)[, c("CHROM", "POS")], genocalls, sample_merge(obj, NS, 1:4))
-  genocallcounts <- data.frame(table(genocalls[, names(samples(obj))]))
-  freq <- ncol(genocallcounts)
-  genocallcounts <- genocallcounts[genocallcounts[, freq] != 0, ]
-  tot <- sum(genocallcounts[, freq])
-  prob <- round(as.numeric(as.character(genocallcounts[, freq]))/tot, 3) 
-  genocallcounts <- cbind(genocallcounts, prob)
-  genocallcounts <- genocallcounts[with(genocallcounts, order(Freq, decreasing=T)), ]
-  return(list(Calls = genocalls, Summary = genocallcounts))
+  # Obtain counts of each DNA/RNA mismatch
+  edit_counts <-
+    table(dna_rna_calls[, names(samples(obj))]) %>%
+      data.frame()
+  
+  # Remove "Zero" mismatch types
+  edit_counts <- edit_counts[edit_counts[, "Freq"] != 0, ]
+  
+  # Get total mismatches
+  mismatch_tot <- sum(edit_counts[, "Freq"])
+  
+  # Proportions of total mismatches
+  mismatch_prob <- 
+    (edit_counts[, "Freq"] / mismatch_tot) %>%
+      round(3)
+  edit_counts <- cbind(edit_counts, "Prob" = mismatch_prob)
+  
+  # Reorder so that most common mismatch is on top
+  edit_counts <- edit_counts[with(edit_counts, order(Freq, decreasing=T)), ]
+  
+  result <- list("Calls" = dna_rna_calls,
+                 "Summary" = edit_counts)
+  
+  class(result) <- "edit_summary"
+  return(result)
 }

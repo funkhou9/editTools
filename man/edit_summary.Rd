@@ -4,8 +4,7 @@
 \alias{edit_summary}
 \title{Scans vcf class for evidence of RNA editing}
 \usage{
-edit_summary(obj, qual = 10, ex.indel = TRUE, geno.dp = 10,
-  geno.hom = 95, edit.dp = 5, summary = TRUE)
+edit_summary(obj, qual_, ex.indel_, geno.dp_, geno.hom_, edit.dp_, summary_)
 }
 \arguments{
 \item{obj}{A vcf object}

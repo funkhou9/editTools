@@ -13,19 +13,36 @@ correct_sequence <- function(editObj, strand = "minus") {
     
     calls[, "DNA"] <- 
       unname(sapply(as.character(calls[, "DNA"]),
-                    switch, 'A'='T','T'='A','G'='C','C'='G'))
+                    switch,
+                    'A' = 'T',
+                    'T' = 'A',
+                    'G' = 'C',
+                    'C' = 'G'))
     
     calls[, "RNA"] <-
       unname(sapply(as.character(calls[, "RNA"]),
-                    switch, 'A'='T','T'='A','G'='C','C'='G'))
+                    switch,
+                    'A' = 'T',
+                    'T' = 'A',
+                    'G' = 'C',
+                    'C' = 'G'))
     
     summ[, "DNA"] <-
       unname(sapply(as.character(summ[, "DNA"]),
-                    switch, 'A'='T','T'='A','G'='C','C'='G'))
+                    switch,
+                    'A' = 'T',
+                    'T' = 'A',
+                    'G' = 'C',
+                    'C' = 'G'))
     
     summ[, "RNA"] <-
       unname(sapply(as.character(summ[, "RNA"]),
-                    switch, 'A'='T','T'='A','G'='C','C'='G'))
+                    switch,
+                    'A' = 'T',
+                    'T' = 'A',
+                    'G' = 'C',
+                    'C' = 'G'))
+    
     return(list("Calls" = calls,
                 "Summary" = summ))
   }

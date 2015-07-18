@@ -8,7 +8,8 @@
 sample_merge <- function(obj, NS, col) {
   
   # Grab specified columns
-  cols <- lapply(samples(obj, 1:NS), function(x){data.frame(x[, col])})
+  cols <- lapply(samples(obj, 1:NS),
+                 function(x) { data.frame(x[, col]) })
   
   # Merge
   call <- do.call("cbind", cols)
