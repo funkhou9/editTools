@@ -7,7 +7,7 @@ index_rna <- function(rna, index_geno) {
   if (rna == "0/1") {
     idx_rna <- c(1, 2)[(index_geno == 1) + 1]
   } else {
-    idx_rna <- c(1, 2)[(rna == "0/0") + 1]
+    idx_rna <- c(1, 2)[(rna == "1/1") + 1]
   }
 }
 
