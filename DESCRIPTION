@@ -8,5 +8,7 @@ Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat
-Imports:
-  magrittr (>= 1.5)
+Imports: 
+  magrittr (>= 1.5),
+    Rcpp
+LinkingTo: Rcpp
