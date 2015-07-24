@@ -12,6 +12,21 @@ edit_scan(plus_file, minus_file, names = c("DNA", "RNA"), qual = 10,
 \item{plus_file}{}
 
 \item{minus_file}{}
+
+\item{qual}{An integer specifiying the minimum variant QUAL}
+
+\item{ex.indel}{logical indicating whether to exclude indels from the scan}
+
+\item{geno.dp}{integer specifying the minimum genotype depth}
+
+\item{geno.hom}{integer ranging from 0 to 1 specifiying the proportion of homozygosity
+the genotype must exhibit}
+
+\item{edit.dp}{integer specifying the minimum depth required for evidence of
+RNA editing}
+
+\item{summary}{logical indicating whether a summary of found edits is returned
+or a subsetted vcf object}
 }
 \value{
 an edit_summary object
