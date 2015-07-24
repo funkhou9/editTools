@@ -69,10 +69,10 @@ class Variant
     
     // Distribute attr_set elements
     this->chrom = attr_set[0];
-    this->pos = stol(attr_set[1]);
+    this->pos = std::stol(attr_set[1]);
     this->ref = attr_set[3];
     this->alt = attr_set[4];
-    this->qual = stol(attr_set[5]);
+    this->qual = std::stol(attr_set[5]);
 
     // Prepare DNA sample for tokenizing
     std::istringstream dna_st(attr_set[9]);
@@ -87,8 +87,8 @@ class Variant
     // Distribute dna_call elements
     this->dna_gt = dna_call[0];
     this->dna_pl = dna_call[1];
-    this->dna_dp = stod(dna_call[2]);
-    this->dna_dv = stod(dna_call[3]);
+    this->dna_dp = std::stod(dna_call[2]);
+    this->dna_dv = std::stod(dna_call[3]);
     
     // Prepare RNA sample for tokenizing
     std::istringstream rna_st(attr_set[10]);
@@ -103,8 +103,8 @@ class Variant
     // Distribute rna_call elements
     this->rna_gt = rna_call[0];
     this->rna_pl = rna_call[1];
-    this->rna_dp = stod(rna_call[2]);
-    this->rna_dv = stod(rna_call[3]);
+    this->rna_dp = std::stod(rna_call[2]);
+    this->rna_dv = std::stod(rna_call[3]);
   }
   
   
@@ -246,4 +246,6 @@ class Variant
     return os;
   }
 };
+
+
 
