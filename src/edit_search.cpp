@@ -3,6 +3,7 @@ using namespace Rcpp;
 
 #include <fstream>
 
+// [[Rcpp::plugins(cpp11)]]
 #include "Variant.h"
 
 //' @export
