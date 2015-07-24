@@ -6,7 +6,7 @@ using namespace Rcpp;
 
 #include "Variant.h"
 
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins("cpp11")]]
 //' @export
 //' @useDynLib editTools
 //' @importFrom Rcpp sourceCpp
