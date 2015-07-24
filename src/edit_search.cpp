@@ -3,9 +3,10 @@ using namespace Rcpp;
 
 #include <fstream>
 
-// [[Rcpp::plugins(cpp11)]]
+
 #include "Variant.h"
 
+// [[Rcpp::plugins(cpp11)]]
 //' @export
 //' @useDynLib editTools
 //' @importFrom Rcpp sourceCpp
