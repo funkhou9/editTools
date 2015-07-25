@@ -24,3 +24,6 @@ context("Test RNA edit scan functionality")
 
 
 
+system.time({t <- 
+  editTools::read_vcf("/Users/sfunkhouser/Programs/Cpp/editTools/1502_DNA_LD_plus_all.vcf") %>%
+    editTools::edit_summary(10, TRUE, 10, 95, 5, TRUE)})
