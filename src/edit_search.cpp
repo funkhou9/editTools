@@ -3,10 +3,8 @@ using namespace Rcpp;
 
 #include <fstream>
 
-
 #include "Variant.h"
 
-// [[Rcpp::plugins("cpp11")]]
 //' @export
 //' @useDynLib editTools
 //' @importFrom Rcpp sourceCpp
@@ -28,8 +26,6 @@ void edit_search(std::string file,
   std::vector<std::string> genos;
   genos.push_back("0/0");
   genos.push_back("1/1");
-  
-  // df.push_back("CHR\tPOS\tDNA\tRNA\tDNA_DP\tDNA_DV\tRNA_DP\tRNA_DV");
   
   // For each line, check if a header line
   while (getline(vcf1, line)) {
