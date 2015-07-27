@@ -292,7 +292,7 @@ public:
   friend std::ostream& operator<<(std::ostream& os, Variant& var)
   {
     os << var.chrom << '\t' << var.pos << '\t' << var.calls <<
-      '\t' << var.dna_dp << '\t' << var.dna_dv << '\t' << 
+      var.dna_dp << '\t' << var.dna_dv << '\t' << 
         var.rna_list << std::endl;
     
     return os;
@@ -302,7 +302,7 @@ public:
 
 
 /* 
- * Global implementations
+ * Global definitions
  */
 
 std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field)
