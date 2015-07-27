@@ -32,9 +32,19 @@ void edit_search(std::string file,
     if (line.empty() || (line.find('#')) == 0)
       continue;
     
-    // Initialize Variant object bool flagged as "plus strand" variants
+    // Initialize Variant object, flagged with strand information
     Variant Var(line, strand);
     
+    // Parse the rest of the line and add to list of rna samples
+    std::vector < std::string > line_vec = parse_v(line);
+    
+    for (int i = 11; i < line_vec.size(); i++) {
+      Rna r(line_vec[i]);
+      Var.add_rna(r);
+    }
+    
+    // If Variant passes all filters, call genotypes for each sample
+    //  and print
     if (Var.indel_filter() &&
         Var.qual_filter(qual) &&
         Var.gt_filter(genos) &&
@@ -43,6 +53,7 @@ void edit_search(std::string file,
         Var.gt_diff_filter() &&
         Var.edit_depth_filter(edit_dp)) {
       
+      Var.call_samples();
       Rcout << Var;
     }
   }
