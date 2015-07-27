@@ -70,11 +70,16 @@ find_edits <- function(file_plus,
   # Some df formatting -
   # 1. Combine plus strand and minus strand results
   # 2. Format sample_names arg into a usable header, apply header
-  # 3. Resorder by CHROM, then POS
+  # 3. Reorder by CHROM, then POS
+  # 4. Remove rownames
   result <- rbind(plus, minus)
   
-  header_names <- c(sample_names,
-                    paste(sample_names, "_DP", "_DV"))
+  header_names <- 
+    sapply(sample_names, function(x) {
+         c(paste(x, "_DV", sep = ''),
+           paste(x, "_DP", sep = ''))}) %>%
+            as.vector() %>%
+              c(sample_names, .)
   
   names(result) <- c("CHR",
                      "POS",
@@ -82,5 +87,7 @@ find_edits <- function(file_plus,
   
   result <- result[order(result[, c("CHR", "POS")]), ]
 
+  rownames(result) <- NULL
+  
   return (result)
 }
