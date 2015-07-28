@@ -254,15 +254,15 @@ public:
   // Changes base calls to their reverse compliment
   void reverse_strand()
   {
-    if (ref == "A") ref = "T";
-    if (ref == "T") ref = "A";
-    if (ref == "C") ref = "G";
-    if (ref == "G") ref = "C";
+    if (ref == "A") ref.assign("T");
+    if (ref == "T") ref.assign("A");
+    if (ref == "C") ref.assign("G");
+    if (ref == "G") ref.assign("C");
     
-    if (alt == "A") alt = "T";
-    if (alt == "T") alt = "A";
-    if (alt == "C") alt = "G";
-    if (alt == "G") alt = "C";
+    if (alt == "A") alt.assign("T");
+    if (alt == "T") alt.assign("A");
+    if (alt == "C") alt.assign("G");
+    if (alt == "G") alt.assign("C");
   }
   
 
