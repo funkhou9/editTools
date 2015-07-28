@@ -45,7 +45,6 @@ void edit_search(std::string file,
       Var.add_rna(r);
     }
     
-    Var.call_samples();
     Var.gt_diff_filter();
     Var.edit_depth_filter(edit_dp);
     
@@ -58,7 +57,7 @@ void edit_search(std::string file,
         Var.dp_filter(geno_dp) &&
         Var.contains_edit()) {
       
-      
+      Var.call_samples();
       Rcout << Var;
     }
   }
