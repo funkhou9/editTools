@@ -1,36 +1,38 @@
-#include <Rcpp.h>
-using namespace Rcpp;
-
-#include <fstream>
-
 #include "Variant.h"
 
-//' @export
+// @export
 //' @useDynLib editTools
 //' @importFrom Rcpp sourceCpp
 // [[Rcpp::export]]
 void edit_search(std::string file,
                 char strand,
-                long qual = 10,
-                bool ex_indel = true,
-                int geno_dp = 10,
-                int geno_hom = 95,
-                int edit_dp = 5)
+                long qual,
+                bool ex_indel,
+                int geno_dp,
+                int geno_hom,
+                int edit_dp)
 {
   
   std::string line;
   std::ifstream vcf1(file);
+  std::vector< std::string > header;
   
   // Additional criteria for filtering
   // Requires homozygous genotypes
-  std::vector<std::string> genos;
+  std::vector< std::string > genos;
   genos.push_back("0/0");
   genos.push_back("1/1");
   
-  // For each line, check if a header line
+  // For each line, check if a ## header line and exclude
   while (getline(vcf1, line)) {
-    if (line.empty() || (line.find('#')) == 0)
+    if (line.empty() || (line.find("##")) == 0)
       continue;
+    
+    // When encounitering # header line, store field names
+    if(line.find('#') == 0) {
+      header = parse_v(line);
+      continue;
+    }
     
     // Initialize Variant object, flagged with strand information
     Variant Var(line, strand);
@@ -39,9 +41,12 @@ void edit_search(std::string file,
     std::vector < std::string > line_vec = parse_v(line);
     
     for (int i = 11; i < line_vec.size(); i++) {
-      Rna r(line_vec[i]);
+      Rna r(line_vec[i], header[i]);
       Var.add_rna(r);
     }
+    
+    Var.gt_diff_filter();
+    Var.edit_depth_filter(edit_dp);
     
     // If Variant passes all filters, call genotypes for each sample
     //  and print
@@ -50,8 +55,7 @@ void edit_search(std::string file,
         Var.gt_filter(genos) &&
         Var.hom_filter(geno_hom) &&
         Var.dp_filter(geno_dp) &&
-        Var.gt_diff_filter() &&
-        Var.edit_depth_filter(edit_dp)) {
+        Var.contains_edit()) {
       
       Var.call_samples();
       Rcout << Var;
