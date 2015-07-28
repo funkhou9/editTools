@@ -119,7 +119,7 @@ class Variant
   double dna_dp;
   double dna_dv;
   std::list< Rna > rna_list;
-  char call;
+  std::string call;
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
@@ -279,25 +279,25 @@ public:
     
     // Call DNA sample
     if (dna_gt == "0/0") 
-      this->call = ref[0];
+      this->call = ref;
     else
-      this->call = alt[0];
+      this->call = alt;
     
     // Call each RNA sample
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
       if (it->rna_gt == "0/1") {
         
         if (dna_gt == "0/0") {
-          it->call = alt[0];
+          it->call = alt;
         } else {
-          it->call = ref[0];
+          it->call = ref;
         }
     
       } else if (it->rna_gt == "0/0") {
-        it->call = ref[0];
+        it->call = ref;
         
       } else {
-        it->call = alt[0];
+        it->call = alt;
       }
     }
   }
