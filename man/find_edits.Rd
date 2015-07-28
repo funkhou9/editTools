@@ -4,16 +4,13 @@
 \alias{find_edits}
 \title{Processes VCF files in search for candidate RNA editing events}
 \usage{
-find_edits(file_plus, file_minus, sample_names, qual = 10, ex_indel = TRUE,
+find_edits(file_plus, file_minus, qual = 10, ex_indel = TRUE,
   geno_dp = 10, geno_hom = 95, edit_dp = 5)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
 
 \item{file_minus}{input filename for VCF file 2.}
-
-\item{sample_names}{character vector of names of samples present in each
-VCF file. The first sample is always assumed to be DNA.}
 
 \item{qual}{An integer specifiying the minimum variant QUAL}
 
