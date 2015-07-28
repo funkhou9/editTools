@@ -4,7 +4,7 @@
 #' @export
 #' @useDynLib editTools
 #' @importFrom Rcpp sourceCpp
-edit_search <- function(file, strand, qual = 10L, ex_indel = TRUE, geno_dp = 10L, geno_hom = 95L, edit_dp = 5L) {
+edit_search <- function(file, strand, qual, ex_indel, geno_dp, geno_hom, edit_dp) {
     invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, qual, ex_indel, geno_dp, geno_hom, edit_dp))
 }
 

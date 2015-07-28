@@ -11,7 +11,10 @@
  * Author: Scott Funkhouser <funkhou9@msu.edu>
  */
 
+#include <Rcpp.h>
+using namespace Rcpp;
 
+#include <fstream>
 
 /* Global parse_v() - Used to split vcf lines into vectors
  *  Overloaded (2 flavors)
@@ -51,14 +54,21 @@ class Rna
    */
 
 public:     
+  std::string tissue_name;
   std::string rna_gt;
   std::string rna_pl;
   double rna_dp;
   double rna_dv;
+  std::string call;
+  bool diff_flag;
+  bool depth_flag;
   
 public:
-  Rna(const std::string& line)
+  Rna(const std::string& line, std::string tissue_name)
   {
+    this->diff_flag = false;
+    this->depth_flag = false;
+    
     char delim_samp = ':';
     std::vector< std::string > rna_call = parse_v(line, delim_samp);
     
@@ -66,6 +76,8 @@ public:
     this->rna_pl = rna_call[1];
     this->rna_dp = std::stod(rna_call[2]);
     this->rna_dv = std::stod(rna_call[3]);
+    
+    this->tissue_name = tissue_name;
   }
 };
 
@@ -73,7 +85,7 @@ public:
 std::ostream& operator<<(std::ostream& os, std::list< Rna >& field)
 {
   for (std::list<Rna>::iterator it = field.begin(); it != field.end(); it++) {
-    os << it->rna_dp << '\t' << it->rna_dv << '\t';
+    os << it->rna_dp << '\t' << it->rna_dv << '\t' << it->tissue_name;
   }
   return os;
 }
@@ -107,14 +119,12 @@ class Variant
   double dna_dp;
   double dna_dv;
   std::list< Rna > rna_list;
+  char call;
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
   char strand;
-
-public:
-  std::vector< std::string > calls;
-
+  
 public:
    
   // Initialize with a line from a vcf file and strand ID
@@ -123,7 +133,7 @@ public:
     char delim_samp = ':';
     
     this->strand = strand;
-    
+
     // Parse whole line into 'general' fields
     std::vector< std::string > gen_set = parse_v(line);
     
@@ -199,34 +209,40 @@ public:
   }
   
   // Detects if Variant has differing DNA and RNA calls
-  bool gt_diff_filter()
+  void gt_diff_filter()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
       if (dna_gt != it->rna_gt)
-        return true;
+        it->diff_flag = true;
     }
-    return false;
   }
     
   // Detects if Variant has a sufficient number of RNA reads
   //  that are in support of editing
-  bool edit_depth_filter(int& depth)
+  void edit_depth_filter(int& depth)
   {
     if (dna_gt == "0/0")
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
         if (it->rna_dv >= depth)
-          return true;
+          it->depth_flag = true;
       }
         
     else
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
         if (it->rna_dp - it->rna_dv >= depth)
-          return true;
+          it->depth_flag = true;
       }
-
-    return false;
   }
 
+  bool contains_edit()
+  {
+    for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
+      if (it->depth_flag && it->diff_flag)
+        return true;
+    }
+    
+    return false;
+  }
   
   /* 
    *  
@@ -263,25 +279,25 @@ public:
     
     // Call DNA sample
     if (dna_gt == "0/0") 
-      this->calls.push_back(ref);
+      this->call = ref[0];
     else
-      this->calls.push_back(alt);
+      this->call = alt[0];
     
     // Call each RNA sample
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
       if (it->rna_gt == "0/1") {
         
         if (dna_gt == "0/0") {
-          this->calls.push_back(alt);
+          it->call = alt[0];
         } else {
-          this->calls.push_back(ref);
+          it->call = ref[0];
         }
     
       } else if (it->rna_gt == "0/0") {
-        this->calls.push_back(ref);
+        it->call = ref[0];
         
       } else {
-        this->calls.push_back(alt);
+        it->call = alt[0];
       }
     }
   }
@@ -291,9 +307,13 @@ public:
   //  Can be used with cout or Rcout. Output intended to be redirected.
   friend std::ostream& operator<<(std::ostream& os, Variant& var)
   {
-    os << var.chrom << '\t' << var.pos << '\t' << var.calls <<
-      var.dna_dp << '\t' << var.dna_dv << '\t' << 
-        var.rna_list << std::endl;
+    for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
+      if (it->depth_flag && it->diff_flag)
+        os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
+          '\t' <<  var.call << '\t' << it->call << '\t' << var.dna_dp << '\t' <<
+            var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<
+              it->tissue_name << std::endl;
+    }
     
     return os;
   }

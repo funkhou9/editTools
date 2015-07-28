@@ -9,8 +9,6 @@
 #'
 #' @param file_plus input filename for VCF file 1.
 #' @param file_minus input filename for VCF file 2.
-#' @param sample_names character vector of names of samples present in each
-#'  VCF file. The first sample is always assumed to be DNA.
 #' @param qual An integer specifiying the minimum variant QUAL
 #' @param ex_indel logical indicating whether to exclude indels from the scan
 #' @param geno_dp integer specifying the minimum genotype depth
@@ -21,10 +19,10 @@
 #' @param summary logical indicating whether a summary of found edits is returned
 #'  or a subsetted vcf object
 #' @return an edit_summary object
+#' @import magrittr
 #' @export
 find_edits <- function(file_plus,
                        file_minus,
-                       sample_names,
                        qual = 10,
                        ex_indel = TRUE,
                        geno_dp = 10,
@@ -51,7 +49,7 @@ find_edits <- function(file_plus,
                                      edit_dp)) %>%
             sapply(function(x) strsplit(x, split = '\t')) %>%
               do.call(rbind, .) %>%
-                as.data.frame()
+                as.data.frame(stringsAsFactors = FALSE)
   
               
   
@@ -65,27 +63,28 @@ find_edits <- function(file_plus,
                                       edit_dp)) %>%
             sapply(function(x) strsplit(x, split = '\t')) %>%
               do.call(rbind, .) %>%
-                as.data.frame()
+                as.data.frame(stringsAsFactors = FALSE)
   
   # Some df formatting -
   # 1. Combine plus strand and minus strand results
   # 2. Format sample_names arg into a usable header, apply header
-  # 3. Reorder by CHROM, then POS
+  # 3. Enusre POS is numeric, then reorder by CHROM, then POS
   # 4. Remove rownames
   result <- rbind(plus, minus)
   
-  header_names <- 
-    sapply(sample_names, function(x) {
-         c(paste(x, "_DV", sep = ''),
-           paste(x, "_DP", sep = ''))}) %>%
-            as.vector() %>%
-              c(sample_names, .)
+  colnames(result) <- c("CHR",
+                        "POS",
+                        "Strand",
+                        "DNA",
+                        "RNA",
+                        "DNA_DP",
+                        "DNA_DV",
+                        "RNA_DP",
+                        "RNA_DV",
+                        "Tissue")
   
-  names(result) <- c("CHR",
-                     "POS",
-                     header_names)
-  
-  result <- result[order(result[, c("CHR", "POS")]), ]
+  result[, "POS"] <- as.numeric(result[, "POS"])
+  result <- result[order(result[, "CHR"], result[,"POS"]), ]
 
   rownames(result) <- NULL
   
