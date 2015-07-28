@@ -2,7 +2,6 @@
 
 S3method("[",vcf)
 export(edit_scan)
-export(edit_search)
 export(find_edits)
 export(merge_strands)
 export(read_vcf)
