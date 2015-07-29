@@ -8,7 +8,8 @@
 #'  along with any number of RNA samples from various tissues.
 #'
 #' @param file_plus input filename for VCF file 1.
-#' @param file_minus input filename for VCF file 2.
+#' @param file_minus input filename for VCF file 2. If only one VCF file provided, it is assumed
+#'  that the RNA variants in that file all come from plus strand transcripts.
 #' @param names A character vector 
 #' @param qual An integer specifiying the minimum variant QUAL
 #' @param ex_indel logical indicating whether to exclude indels from the scan
@@ -23,7 +24,7 @@
 #' @import magrittr
 #' @export
 find_edits <- function(file_plus,
-                       file_minus,
+                       file_minus = NULL,
                        names = character(),
                        qual = 10,
                        ex_indel = TRUE,
@@ -55,27 +56,29 @@ find_edits <- function(file_plus,
                 as.data.frame(stringsAsFactors = FALSE)
   
               
-  
-  # Process minus file
-  minus <- capture.output(edit_search(file_minus,
-                                      m,
-                                      names,
-                                      qual,
-                                      ex_indel,
-                                      geno_dp,
-                                      geno_hom,
-                                      edit_dp)) %>%
-            sapply(function(x) strsplit(x, split = '\t')) %>%
-              do.call(rbind, .) %>%
-                as.data.frame(stringsAsFactors = FALSE)
-  
-  # Some df formatting -
-  # 1. Combine plus strand and minus strand results
-  # 2. Format sample_names arg into a usable header, apply header
-  # 3. Enusre POS is numeric, then reorder by CHROM, then POS
-  # 4. Remove rownames
-  result <- rbind(plus, minus)
-  
+  if (!is.null(file_minus)) {
+    # Process minus file
+    minus <- capture.output(edit_search(file_minus,
+                                        m,
+                                        names,
+                                        qual,
+                                        ex_indel,
+                                        geno_dp,
+                                        geno_hom,
+                                        edit_dp)) %>%
+      sapply(function(x) strsplit(x, split = '\t')) %>%
+      do.call(rbind, .) %>%
+      as.data.frame(stringsAsFactors = FALSE)
+    
+    # Some df formatting -
+    # 1. Combine plus strand and minus strand results
+    # 2. Format sample_names arg into a usable header, apply header
+    # 3. Enusre POS is numeric, then reorder by CHROM, then POS
+    # 4. Remove rownames
+    result <- rbind(plus, minus)
+  } else
+    result <- plus
+
   colnames(result) <- c("CHR",
                         "POS",
                         "Strand",

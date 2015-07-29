@@ -4,13 +4,14 @@
 \alias{find_edits}
 \title{Processes VCF files in search for candidate RNA editing events}
 \usage{
-find_edits(file_plus, file_minus, names = character(), qual = 10,
+find_edits(file_plus, file_minus = NULL, names = character(), qual = 10,
   ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
 
-\item{file_minus}{input filename for VCF file 2.}
+\item{file_minus}{input filename for VCF file 2. If only one VCF file provided, it is assumed
+that the RNA variants in that file all come from plus strand transcripts.}
 
 \item{names}{A character vector}
 
