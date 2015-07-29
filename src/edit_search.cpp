@@ -6,6 +6,7 @@
 // [[Rcpp::export]]
 void edit_search(std::string file,
                 char strand,
+                CharacterVector names,
                 long qual,
                 bool ex_indel,
                 int geno_dp,
@@ -16,6 +17,11 @@ void edit_search(std::string file,
   std::string line;
   std::ifstream vcf1(file);
   std::vector< std::string > header;
+  
+  std::vector< std::string > names_vec(names.size());
+  for (int i = 0; i < names.size(); i++) {  
+    names_vec[i] = std::string(names[i]);  
+  }
   
   // Additional criteria for filtering
   // Requires homozygous genotypes
@@ -38,13 +44,23 @@ void edit_search(std::string file,
     Variant Var(line, strand);
     
     // Parse the rest of the line and add to list of rna samples
-    std::vector < std::string > line_vec = parse_v(line);
-    
-    for (int i = 11; i < line_vec.size(); i++) {
-      Rna r(line_vec[i], header[i]);
-      Var.add_rna(r);
+    std::vector< std::string > line_vec = parse_v(line);
+  
+    // Initialize Rna objects with one of two ways depending on if
+    //  names is provided
+    if (names_vec.empty()) {
+      for (int i = 11; i < line_vec.size(); i++) {
+        Rna r(line_vec[i], header[i]);
+        Var.add_rna(r);
+      }
+    } else {
+      for (int i = 0; i < names_vec.size(); i++) {
+        Rna r(line_vec[i + 11], names_vec[i]);
+        Var.add_rna(r);
+      }
     }
     
+    // Flag Rna objects for evidence for editing
     Var.gt_diff_filter();
     Var.edit_depth_filter(edit_dp);
     
