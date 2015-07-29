@@ -4,11 +4,12 @@
 #'  plus strand transcripts (VCF file 1). The other from minus strand transcripts.
 #'  (VCF file 2).
 #'  
-#' Each vcf file requires two samples, a genomic DNA sample (from a WGS bam file)
-#'  and a RNA sample coming from a tissue of interest (from a RNAseq bam file)
+#' Each vcf file requires a genomic DNA sample (the first sample listed in the vcf file),
+#'  along with any number of RNA samples from various tissues.
 #'
 #' @param file_plus input filename for VCF file 1.
 #' @param file_minus input filename for VCF file 2.
+#' @param names A character vector 
 #' @param qual An integer specifiying the minimum variant QUAL
 #' @param ex_indel logical indicating whether to exclude indels from the scan
 #' @param geno_dp integer specifying the minimum genotype depth
@@ -23,6 +24,7 @@
 #' @export
 find_edits <- function(file_plus,
                        file_minus,
+                       names = character(),
                        qual = 10,
                        ex_indel = TRUE,
                        geno_dp = 10,
@@ -42,6 +44,7 @@ find_edits <- function(file_plus,
   # Process plus file
   plus <- capture.output(edit_search(file_plus,
                                      p,
+                                     names,
                                      qual,
                                      ex_indel,
                                      geno_dp,
@@ -56,6 +59,7 @@ find_edits <- function(file_plus,
   # Process minus file
   minus <- capture.output(edit_search(file_minus,
                                       m,
+                                      names,
                                       qual,
                                       ex_indel,
                                       geno_dp,
