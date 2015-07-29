@@ -5,7 +5,7 @@
 //' @importFrom Rcpp sourceCpp
 // [[Rcpp::export]]
 void edit_search(std::string file,
-                char strand,
+                std::string strand,
                 long qual,
                 bool ex_indel,
                 int geno_dp,

@@ -6,12 +6,12 @@
 using namespace Rcpp;
 
 // edit_search
-void edit_search(std::string file, char strand, long qual, bool ex_indel, int geno_dp, int geno_hom, int edit_dp);
+void edit_search(std::string file, std::string strand, long qual, bool ex_indel, int geno_dp, int geno_hom, int edit_dp);
 RcppExport SEXP editTools_edit_search(SEXP fileSEXP, SEXP strandSEXP, SEXP qualSEXP, SEXP ex_indelSEXP, SEXP geno_dpSEXP, SEXP geno_homSEXP, SEXP edit_dpSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< char >::type strand(strandSEXP);
+    Rcpp::traits::input_parameter< std::string >::type strand(strandSEXP);
     Rcpp::traits::input_parameter< long >::type qual(qualSEXP);
     Rcpp::traits::input_parameter< bool >::type ex_indel(ex_indelSEXP);
     Rcpp::traits::input_parameter< int >::type geno_dp(geno_dpSEXP);
