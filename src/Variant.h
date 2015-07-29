@@ -21,7 +21,7 @@ using namespace Rcpp;
  *  1. Provide a string
  *  2. Provide a string and a delimiter
  *  
- *  See implementations below
+ *  See definitions below
  */
 
 // Intended for general space separated fields
@@ -37,7 +37,7 @@ std::vector< std::string > parse_v(const std::string& line,
 /* Global << overloadings 
  * To print a vector of strings
  *  
- *  See implementations below
+ *  See definitions below
  */
 
 std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field);
@@ -82,13 +82,6 @@ public:
 };
 
 
-std::ostream& operator<<(std::ostream& os, std::list< Rna >& field)
-{
-  for (std::list<Rna>::iterator it = field.begin(); it != field.end(); it++) {
-    os << it->rna_dp << '\t' << it->rna_dv << '\t' << it->tissue_name;
-  }
-  return os;
-}
 
 
 class Variant
@@ -123,16 +116,16 @@ class Variant
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
-  char strand;
+  bool minus;
   
 public:
    
   // Initialize with a line from a vcf file and strand ID
-  Variant(const std::string& line, char& strand)
+  Variant(const std::string& line, bool& minus)
   {
     char delim_samp = ':';
     
-    this->strand = strand;
+    this->minus = minus;
 
     // Parse whole line into 'general' fields
     std::vector< std::string > gen_set = parse_v(line);
@@ -272,11 +265,10 @@ public:
   //  that is supportive of RNA editing.
   void call_samples()
   {
-
-    if (strand == '-') {
-      reverse_strand();
-    }
     
+    if (minus)
+      reverse_strand();
+      
     // Call DNA sample
     if (dna_gt == "0/0") 
       this->call = ref;
@@ -309,7 +301,7 @@ public:
   {
     for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
       if (it->depth_flag && it->diff_flag)
-        os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
+        os << var.chrom << '\t' << var.pos << '\t' << var.minus <<
           '\t' <<  var.call << '\t' << it->call << '\t' << var.dna_dp << '\t' <<
             var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<
               it->tissue_name << std::endl;

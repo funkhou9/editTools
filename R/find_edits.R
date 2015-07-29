@@ -30,8 +30,8 @@ find_edits <- function(file_plus,
                        edit_dp = 5) {
   
   # Initialize lh references to chars
-  p <- '+'
-  m <- '-'
+  p <- "+"
+  m <- "-"
   
   # Process files by - 
   # 1. capture stdout,
@@ -41,7 +41,7 @@ find_edits <- function(file_plus,
   
   # Process plus file
   plus <- capture.output(edit_search(file_plus,
-                                     p,
+                                     FALSE,
                                      qual,
                                      ex_indel,
                                      geno_dp,
@@ -55,7 +55,7 @@ find_edits <- function(file_plus,
   
   # Process minus file
   minus <- capture.output(edit_search(file_minus,
-                                      m,
+                                      TRUE,
                                       qual,
                                       ex_indel,
                                       geno_dp,
