@@ -4,13 +4,15 @@
 \alias{find_edits}
 \title{Processes VCF files in search for candidate RNA editing events}
 \usage{
-find_edits(file_plus, file_minus, qual = 10, ex_indel = TRUE,
-  geno_dp = 10, geno_hom = 95, edit_dp = 5)
+find_edits(file_plus, file_minus, names = character(), qual = 10,
+  ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
 
 \item{file_minus}{input filename for VCF file 2.}
+
+\item{names}{A character vector}
 
 \item{qual}{An integer specifiying the minimum variant QUAL}
 
@@ -36,7 +38,7 @@ Must supply two files - one from RNA seq alignments that come from
  (VCF file 2).
 }
 \details{
-Each vcf file requires two samples, a genomic DNA sample (from a WGS bam file)
- and a RNA sample coming from a tissue of interest (from a RNAseq bam file)
+Each vcf file requires a genomic DNA sample (the first sample listed in the vcf file),
+ along with any number of RNA samples from various tissues.
 }
 
