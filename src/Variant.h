@@ -116,16 +116,16 @@ class Variant
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
-  bool minus;
+  char strand;
   
 public:
    
   // Initialize with a line from a vcf file and strand ID
-  Variant(const std::string& line, bool& minus)
+  Variant(const std::string& line, char& strand)
   {
     char delim_samp = ':';
     
-    this->minus = minus;
+    this->strand = strand;
 
     // Parse whole line into 'general' fields
     std::vector< std::string > gen_set = parse_v(line);
@@ -248,14 +248,14 @@ public:
   void reverse_strand()
   {
     if (ref == "A") ref.assign("T");
-    if (ref == "T") ref.assign("A");
-    if (ref == "C") ref.assign("G");
-    if (ref == "G") ref.assign("C");
-    
+    else if (ref == "T") ref.assign("A");
+    else if (ref == "C") ref.assign("G");
+    else if (ref == "G") ref.assign("C");
+
     if (alt == "A") alt.assign("T");
-    if (alt == "T") alt.assign("A");
-    if (alt == "C") alt.assign("G");
-    if (alt == "G") alt.assign("C");
+    else if (alt == "T") alt.assign("A");
+    else if (alt == "C") alt.assign("G");
+    else if (alt == "G") alt.assign("C");
   }
   
 
@@ -266,7 +266,7 @@ public:
   void call_samples()
   {
     
-    if (minus)
+    if (strand == '-')
       reverse_strand();
       
     // Call DNA sample
@@ -301,7 +301,7 @@ public:
   {
     for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
       if (it->depth_flag && it->diff_flag)
-        os << var.chrom << '\t' << var.pos << '\t' << var.minus <<
+        os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << '\t' << it->call << '\t' << var.dna_dp << '\t' <<
             var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<
               it->tissue_name << std::endl;

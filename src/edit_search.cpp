@@ -5,7 +5,7 @@
 //' @importFrom Rcpp sourceCpp
 // [[Rcpp::export]]
 void edit_search(std::string file,
-                bool minus,
+                char strand,
                 long qual,
                 bool ex_indel,
                 int geno_dp,
@@ -35,7 +35,7 @@ void edit_search(std::string file,
     }
     
     // Initialize Variant object, flagged with strand information
-    Variant Var(line, minus);
+    Variant Var(line, strand);
     
     // Parse the rest of the line and add to list of rna samples
     std::vector < std::string > line_vec = parse_v(line);

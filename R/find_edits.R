@@ -41,7 +41,7 @@ find_edits <- function(file_plus,
   
   # Process plus file
   plus <- capture.output(edit_search(file_plus,
-                                     FALSE,
+                                     p,
                                      qual,
                                      ex_indel,
                                      geno_dp,
@@ -55,7 +55,7 @@ find_edits <- function(file_plus,
   
   # Process minus file
   minus <- capture.output(edit_search(file_minus,
-                                      TRUE,
+                                      m,
                                       qual,
                                       ex_indel,
                                       geno_dp,
