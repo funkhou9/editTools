@@ -36,6 +36,11 @@ find_edits <- function(file_plus,
   p <- "+"
   m <- "-"
   
+  # Requre tissue samples to be labeled by user
+  if (length(names) == 0) {
+    stop ("Please provide names argument")
+  }
+  
   # Process files by - 
   # 1. capture stdout,
   # 2. split by tab delimiter,
@@ -95,5 +100,16 @@ find_edits <- function(file_plus,
 
   rownames(result) <- NULL
   
+  # Produce mismatch counts for each tissue sample
+  mismatches <- lapply(names,
+                       count_mismatch,
+                       result)
+  names(mismatches) <- names
+  
+  # Append mismatch counts to existing results and declare class
+  result <- list("Edits" = result,
+                 "Mismatches" = mismatches)
+  
+  class(result) <- "edit_table"
   return (result)
 }
