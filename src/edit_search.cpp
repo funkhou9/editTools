@@ -49,13 +49,13 @@ void edit_search(std::string file,
     // Initialize Rna objects with one of two ways depending on if
     //  names is provided
     if (names_vec.empty()) {
-      for (int i = 11; i < line_vec.size(); i++) {
+      for (int i = 10; i < line_vec.size(); i++) {
         Rna r(line_vec[i], header[i]);
         Var.add_rna(r);
       }
     } else {
       for (int i = 0; i < names_vec.size(); i++) {
-        Rna r(line_vec[i + 11], names_vec[i]);
+        Rna r(line_vec[i + 10], names_vec[i]);
         Var.add_rna(r);
       }
     }

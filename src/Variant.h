@@ -1,5 +1,6 @@
-/* RNA editing detector for VCF data
- * 
+/********************************************************************** 
+ * RNA editing detector for VCF data
+ *
  * Goals:
  *  - Ecapulate the complexity of 'variants' presented in VCF files
  *  - Provide a class to be used by editTools::edit_search()
@@ -9,49 +10,53 @@
  *  Rcpp
  *  
  * Author: Scott Funkhouser <funkhou9@msu.edu>
- */
+ **********************************************************************/
 
 #include <Rcpp.h>
 using namespace Rcpp;
 
 #include <fstream>
 
-/* Global parse_v() - Used to split vcf lines into vectors
+/**********************************************************
+ * Global parse_v() - Used to split vcf lines into vectors
  *  Overloaded (2 flavors)
  *  1. Provide a string
  *  2. Provide a string and a delimiter
  *  
  *  See definitions below
- */
+ **********************************************************/
 
 // Intended for general space separated fields
 std::vector< std::string > parse_v(const std::string& line);
 
 
-// Intended for special colon separated fields
+// Intended for special colon (or other) separated fields
 std::vector< std::string > parse_v(const std::string& line,
                                    char sep);
 
 
 
-/* Global << overloadings 
+/***************************************** 
+ * Global << overloadings 
  * To print a vector of strings
  *  
  *  See definitions below
- */
+ *****************************************/
 
 std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field);
 
 
 class Rna
 {
-  /* Representing a single RNA sample in a VCF file
+  
+  /**************************************************
+   * Representing a single RNA sample in a VCF file
    * 
    * rna_gt coded genotype for a variant
    * rna_pl ...
    * rna_dp total sequencing depth for a variant
    * rna_dv sequencing depth in support of variant
-   */
+   **************************************************/
 
 public:     
   std::string tissue_name;
@@ -83,11 +88,11 @@ public:
 
 
 
-
 class Variant
 {
   
-  /* VCF file produces these fields when options
+  /************************************************************
+   * VCF file produces these fields when options 
    *  used are -O v -m -v with two samples (DNA and RNA in this case) 
    * 
    * chrom = chromosome where variant was found
@@ -100,7 +105,7 @@ class Variant
    * info = ';' delimited sequence of additional information
    * format = ';' delimited sequence listing how dna_call and rna_call
    *  should be read 
-   */
+   ************************************************************/
   
   std::string chrom;
   unsigned long pos;
@@ -152,16 +157,17 @@ public:
   // Add an RNA sample
   void add_rna(Rna& r)
   {
-    this->rna_list.insert(rna_list.begin(), r);
+    this->rna_list.push_back(r);
   }
   
 
   
-  /* Filters for RNA editing detection
+  /* **************************************************
+   * Filters for RNA editing detection
    * 
    * Each method flags true if Variant object
    *  provides a piece of evidence for RNA editing
-   */
+   *****************************************************/
   
   
   // Detects if Variant has a single char in both
@@ -201,7 +207,8 @@ public:
     return (dna_dp >= depth);
   }
   
-  // Detects if Variant has differing DNA and RNA calls
+  // Detects if Variant possesses an Rna object in rna_list where it's genotype doesn't
+  //  match the genomic sample
   void gt_diff_filter()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
@@ -210,8 +217,8 @@ public:
     }
   }
     
-  // Detects if Variant has a sufficient number of RNA reads
-  //  that are in support of editing
+  // Detects if Variant possesses an Rna object in rna_list where the depth of sequence
+  //  supporting RNA editing is at least the depth specified
   void edit_depth_filter(int& depth)
   {
     if (dna_gt == "0/0")
@@ -227,6 +234,8 @@ public:
       }
   }
 
+  // If the Variant object has at least one Rna object in its list that meets both
+  //  criteria for editing
   bool contains_edit()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
@@ -237,11 +246,9 @@ public:
     return false;
   }
   
-  /* 
-   *  
-   *  Methods to choose between and change REF and ALT fields
-   *
-   */
+  /*********************************************************** 
+   *  Methods to call genomic and RNA samples
+   ***********************************************************/
    
   
   // Changes base calls to their reverse compliment
@@ -313,9 +320,9 @@ public:
 
 
 
-/* 
+/************************************************************ 
  * Global definitions
- */
+ ************************************************************/
 
 std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field)
 {
