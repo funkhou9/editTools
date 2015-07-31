@@ -101,10 +101,13 @@ find_edits <- function(file_plus,
   rownames(result) <- NULL
   
   # Produce mismatch counts for each tissue sample
-  mismatches <- lapply(names,
+  #   Guards against the possibility that a tissue sample contained no edits
+  tissues_w_edits <- names [names %in% result$Tissue]
+  
+  mismatches <- lapply(tissues_w_edits,
                        count_mismatch,
                        result)
-  names(mismatches) <- names
+  names(mismatches) <- tissues_w_edits
   
   # Append mismatch counts to existing results and declare class
   result <- list("Edits" = result,
