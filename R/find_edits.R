@@ -26,11 +26,11 @@
 find_edits <- function(file_plus,
                        file_minus = NULL,
                        names = character(),
-                       qual = 10,
                        ex_indel = TRUE,
                        geno_dp = 10,
                        geno_hom = 95,
-                       edit_dp = 5) {
+                       edit_dp = 5,
+                       edit_likelihood = 100) {
   
   # Initialize lh references to chars
   p <- "+"
@@ -51,11 +51,11 @@ find_edits <- function(file_plus,
   plus <- capture.output(edit_search(file_plus,
                                      p,
                                      names,
-                                     qual,
                                      ex_indel,
                                      geno_dp,
                                      geno_hom,
-                                     edit_dp)) %>%
+                                     edit_dp,
+                                     edit_likelihood)) %>%
             sapply(function(x) strsplit(x, split = '\t')) %>%
               do.call(rbind, .) %>%
                 as.data.frame(stringsAsFactors = FALSE)
@@ -66,11 +66,11 @@ find_edits <- function(file_plus,
     minus <- capture.output(edit_search(file_minus,
                                         m,
                                         names,
-                                        qual,
                                         ex_indel,
                                         geno_dp,
                                         geno_hom,
-                                        edit_dp)) %>%
+                                        edit_dp,
+                                        edit_likelihood)) %>%
       sapply(function(x) strsplit(x, split = '\t')) %>%
       do.call(rbind, .) %>%
       as.data.frame(stringsAsFactors = FALSE)

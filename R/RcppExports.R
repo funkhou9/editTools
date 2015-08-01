@@ -3,7 +3,7 @@
 
 #' @useDynLib editTools
 #' @importFrom Rcpp sourceCpp
-edit_search <- function(file, strand, names, qual, ex_indel, geno_dp, geno_hom, edit_dp) {
-    invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, names, qual, ex_indel, geno_dp, geno_hom, edit_dp))
+edit_search <- function(file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh) {
+    invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh))
 }
 

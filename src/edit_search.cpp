@@ -7,11 +7,11 @@
 void edit_search(std::string file,
                 char strand,
                 CharacterVector names,
-                long qual,
                 bool ex_indel,
                 int geno_dp,
                 int geno_hom,
-                int edit_dp)
+                int edit_dp,
+                int lh)
 {
   
   std::string line;
@@ -63,11 +63,12 @@ void edit_search(std::string file,
     // Flag Rna objects for evidence for editing
     Var.gt_diff_filter();
     Var.edit_depth_filter(edit_dp);
+    Var.likelihood_filter(lh);
     
     // If Variant passes all filters, call genotypes for each sample
     //  and print
     if (Var.indel_filter() &&
-        Var.qual_filter(qual) &&
+        // Var.qual_filter(qual) &&
         Var.gt_filter(genos) &&
         Var.hom_filter(geno_hom) &&
         Var.dp_filter(geno_dp) &&

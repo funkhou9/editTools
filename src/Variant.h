@@ -34,7 +34,8 @@ std::vector< std::string > parse_v(const std::string& line);
 std::vector< std::string > parse_v(const std::string& line,
                                    char sep);
 
-
+char delim_samp = ':';
+char delim_pl = ',';
 
 /***************************************** 
  * Global << overloadings 
@@ -61,24 +62,25 @@ class Rna
 public:     
   std::string tissue_name;
   std::string rna_gt;
-  std::string rna_pl;
+  std::vector< std::string > rna_pl;
   double rna_dp;
   double rna_dv;
   std::string call;
   bool diff_flag;
   bool depth_flag;
+  bool likelihood_flag;
   
 public:
   Rna(const std::string& line, std::string tissue_name)
   {
     this->diff_flag = false;
     this->depth_flag = false;
+    this->likelihood_flag = false;
     
-    char delim_samp = ':';
     std::vector< std::string > rna_call = parse_v(line, delim_samp);
     
     this->rna_gt = rna_call[0];
-    this->rna_pl = rna_call[1];
+    this->rna_pl = parse_v(rna_call[1], delim_pl);
     this->rna_dp = std::stod(rna_call[2]);
     this->rna_dv = std::stod(rna_call[3]);
     
@@ -113,11 +115,12 @@ class Variant
   std::string alt;
   long qual;
   std::string dna_gt;
-  std::string dna_pl;
+  std::vector< std::string > dna_pl;
   double dna_dp;
   double dna_dv;
   std::list< Rna > rna_list;
   std::string call;
+  bool geno_likelihood_flag;
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
@@ -128,9 +131,8 @@ public:
   // Initialize with a line from a vcf file and strand ID
   Variant(const std::string& line, char& strand)
   {
-    char delim_samp = ':';
-    
     this->strand = strand;
+    this->geno_likelihood_flag = false;
 
     // Parse whole line into 'general' fields
     std::vector< std::string > gen_set = parse_v(line);
@@ -148,7 +150,7 @@ public:
     
     // Distribute dna_call elements
     this->dna_gt = dna_call[0];
-    this->dna_pl = dna_call[1];
+    this->dna_pl = parse_v(dna_call[1], delim_pl);
     this->dna_dp = std::stod(dna_call[2]);
     this->dna_dv = std::stod(dna_call[3]);
   }
@@ -234,12 +236,44 @@ public:
       }
   }
 
+  // Sufficient likelihood of RNA call? Next most likely genotype call must have a phred
+  //  scaled genotype likelihood greater than l.
+  void likelihood_filter(int& l)
+  {
+    
+    // Inspect likelihoods for genome
+    int count = 0;
+    
+    for (std::vector< std::string >::const_iterator itp = dna_pl.begin(); itp != dna_pl.end(); itp++) {
+      int likeli = std::stoi(*itp);
+      if (likeli >= l)
+        count ++;
+    }
+    
+    if (count == 2)
+      geno_likelihood_flag = true;
+    
+    // Inspect likelihoods for each rna sample
+    for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
+      int count_rna = 0;
+      
+      for (std::vector< std::string >::const_iterator itp = it->rna_pl.begin(); itp != it->rna_pl.end(); itp++) {
+        int likeli = std::stoi(*itp);
+        if (likeli >= l)
+          count_rna ++;
+      }
+      
+      if (count_rna == 2)
+        it->likelihood_flag = true;
+    }
+  }
+  
   // If the Variant object has at least one Rna object in its list that meets both
   //  criteria for editing
   bool contains_edit()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-      if (it->depth_flag && it->diff_flag)
+      if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         return true;
     }
     
@@ -307,7 +341,7 @@ public:
   friend std::ostream& operator<<(std::ostream& os, Variant& var)
   {
     for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
-      if (it->depth_flag && it->diff_flag)
+      if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << '\t' << it->call << '\t' << var.dna_dp << '\t' <<
             var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<

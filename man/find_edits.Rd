@@ -4,8 +4,9 @@
 \alias{find_edits}
 \title{Processes VCF files in search for candidate RNA editing events}
 \usage{
-find_edits(file_plus, file_minus = NULL, names = character(), qual = 10,
-  ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5)
+find_edits(file_plus, file_minus = NULL, names = character(),
+  ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5,
+  edit_likelihood = 100)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
@@ -14,8 +15,6 @@ find_edits(file_plus, file_minus = NULL, names = character(), qual = 10,
 that the RNA variants in that file all come from plus strand transcripts.}
 
 \item{names}{A character vector}
-
-\item{qual}{An integer specifiying the minimum variant QUAL}
 
 \item{ex_indel}{logical indicating whether to exclude indels from the scan}
 
@@ -26,6 +25,8 @@ the genotype must exhibit}
 
 \item{edit_dp}{integer specifying the minimum depth required for evidence of
 RNA editing}
+
+\item{qual}{An integer specifiying the minimum variant QUAL}
 
 \item{summary}{logical indicating whether a summary of found edits is returned
 or a subsetted vcf object}
