@@ -343,7 +343,7 @@ public:
     for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
       if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
-          '\t' <<  var.call << '\t' << it->call << '\t' << var.dna_dp << '\t' <<
+          '\t' <<  var.call << "to" << it->call << '\t' << var.dna_dp << '\t' <<
             var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<
               it->tissue_name << std::endl;
     }

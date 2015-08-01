@@ -30,7 +30,7 @@ find_edits <- function(file_plus,
                        geno_dp = 10,
                        geno_hom = 95,
                        edit_dp = 5,
-                       edit_likelihood = 40) {
+                       edit_likelihood = 20) {
   
   # Initialize lh references to chars
   p <- "+"
@@ -87,8 +87,7 @@ find_edits <- function(file_plus,
   colnames(result) <- c("CHR",
                         "POS",
                         "Strand",
-                        "DNA",
-                        "RNA",
+                        "Mismatch",
                         "DNA_DP",
                         "DNA_DV",
                         "RNA_DP",
@@ -102,17 +101,17 @@ find_edits <- function(file_plus,
   
   # Produce mismatch counts for each tissue sample
   #   Guards against the possibility that a tissue sample contained no edits
-  tissues_w_edits <- names [names %in% result$Tissue]
+#   tissues_w_edits <- names [names %in% result$Tissue]
+#   
+#   mismatches <- lapply(tissues_w_edits,
+#                        count_mismatch,
+#                        result)
+#   names(mismatches) <- tissues_w_edits
+#   
+#   # Append mismatch counts to existing results and declare class
+#   result <- list("Edits" = result,
+#                  "Mismatches" = mismatches)
   
-  mismatches <- lapply(tissues_w_edits,
-                       count_mismatch,
-                       result)
-  names(mismatches) <- tissues_w_edits
-  
-  # Append mismatch counts to existing results and declare class
-  result <- list("Edits" = result,
-                 "Mismatches" = mismatches)
-  
-  class(result) <- "edit_table"
+  # class(result) <- "edit_table"
   return (result)
 }
