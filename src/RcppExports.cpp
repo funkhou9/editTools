@@ -22,3 +22,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// rm_search
+void rm_search(CharacterMatrix x, std::string rm_file);
+RcppExport SEXP editTools_rm_search(SEXP xSEXP, SEXP rm_fileSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::string >::type rm_file(rm_fileSEXP);
+    rm_search(x, rm_file);
+    return R_NilValue;
+END_RCPP
+}

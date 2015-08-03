@@ -2,9 +2,11 @@
 
 S3method("[",vcf)
 S3method(subset,edit_table)
+export(edit_match)
 export(find_edits)
 export(plot_edits)
 export(read_vcf)
+export(repeatmask_read)
 export(samples)
 export(snps)
 import(ggplot2)
