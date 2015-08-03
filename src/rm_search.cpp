@@ -50,32 +50,60 @@ void rm_search(CharacterMatrix x, std::string rm_file) {
     }
   }
   
-  
-  for (int i = 0; i < x.nrow(); i++) {
-    CharacterVector v = x(i, _);
-    
-    std::vector< std::string > vec(v.size());
-    
-    for (int i = 0; i < v.size(); i++)
-      vec[i] = std::string(v[i]);
-    
-    for (vvit = mat.begin(); vvit != mat.end(); vvit++) {
-      
-      if (("chr" + vec[0]) == vvit->at(4) &&
+  for (vvit = mat.begin(); vvit != mat.end(); vvit++) {
+      for (int i = 0; i < x.nrow(); i++) {
+        CharacterVector v = x(i, _);
+        
+        std::vector< std::string > vec(v.size());
+        
+        for (int i = 0; i < v.size(); i++)
+          vec[i] = std::string(v[i]);
+        
+        if (("chr" + vec[0]) == vvit->at(4) &&
             (std::stol(vec[1]) >= std::stol(vvit->at(5)) && std::stol(vec[1]) <= std::stol(vvit->at(6)))) {
-        
-        std::string start = vvit->at(5);
-        std::string end = vvit->at(6);
-        std::string repeat = vvit->at(9);
-        std::string family = vvit->at(10);
-        
-        vec.push_back(start);
-        vec.push_back(end);
-        vec.push_back(repeat);
-        vec.push_back(family);
-        
-        Rcout << vec << std::endl;
+          
+          std::string start = vvit->at(5);
+          std::string end = vvit->at(6);
+          std::string repeat = vvit->at(9);
+          std::string family = vvit->at(10);
+          
+          vec.push_back(start);
+          vec.push_back(end);
+          vec.push_back(repeat);
+          vec.push_back(family);
+          
+          Rcout << vec << std::endl;
+        }
       }
-    }
   }
 }
+  
+//   for (int i = 0; i < x.nrow(); i++) {
+//     CharacterVector v = x(i, _);
+//     
+//     std::vector< std::string > vec(v.size());
+//     
+//     for (int i = 0; i < v.size(); i++)
+//       vec[i] = std::string(v[i]);
+//     
+//     for (vvit = mat.begin(); vvit != mat.end(); vvit++) {
+//       
+//       if (("chr" + vec[0]) == vvit->at(4) &&
+//             (std::stol(vec[1]) >= std::stol(vvit->at(5)) && std::stol(vec[1]) <= std::stol(vvit->at(6)))) {
+//         
+//         std::string start = vvit->at(5);
+//         std::string end = vvit->at(6);
+//         std::string repeat = vvit->at(9);
+//         std::string family = vvit->at(10);
+//         
+//         vec.push_back(start);
+//         vec.push_back(end);
+//         vec.push_back(repeat);
+//         vec.push_back(family);
+//         
+//         Rcout << vec << std::endl;
+//       }
+//     }
+//   }
+// }
+
