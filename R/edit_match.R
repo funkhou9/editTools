@@ -1,6 +1,6 @@
 
 #' @export
-edit_match <- function(editObj, searchObj, stranded=F) {
+edit_match <- function(editObj, searchObj, stranded = FALSE) {
   
   
 

@@ -84,8 +84,8 @@ find_edits <- function(file_plus,
   } else
     result <- plus
 
-  colnames(result) <- c("CHR",
-                        "POS",
+  colnames(result) <- c("Chr",
+                        "Pos",
                         "Strand",
                         "Mismatch",
                         "DNA_DP",
@@ -94,24 +94,24 @@ find_edits <- function(file_plus,
                         "RNA_DV",
                         "Tissue")
   
-  result[, "POS"] <- as.numeric(result[, "POS"])
-  result <- result[order(result[, "CHR"], result[,"POS"]), ]
+  result[, "Pos"] <- as.numeric(result[, "Pos"])
+  result <- result[order(result[, "Chr"], result[,"Pos"]), ]
 
   rownames(result) <- NULL
   
   # Produce mismatch counts for each tissue sample
   #   Guards against the possibility that a tissue sample contained no edits
-#   tissues_w_edits <- names [names %in% result$Tissue]
-#   
-#   mismatches <- lapply(tissues_w_edits,
-#                        count_mismatch,
-#                        result)
-#   names(mismatches) <- tissues_w_edits
-#   
-#   # Append mismatch counts to existing results and declare class
-#   result <- list("Edits" = result,
-#                  "Mismatches" = mismatches)
+  tissues_w_edits <- names [names %in% result$Tissue]
   
-  # class(result) <- "edit_table"
+  mismatches <- lapply(tissues_w_edits,
+                       count_mismatch,
+                       result)
+  names(mismatches) <- tissues_w_edits
+  
+  # Append mismatch counts to existing results and declare class
+  result <- list("AllSites" = result,
+                 "Tissues" = mismatches)
+  
+  class(result) <- "edit_table"
   return (result)
 }
