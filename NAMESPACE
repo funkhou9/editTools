@@ -2,6 +2,7 @@
 
 S3method("[",vcf)
 S3method(subset,edit_table)
+export(add_repeatmask)
 export(edit_match)
 export(find_edits)
 export(plot_edits)

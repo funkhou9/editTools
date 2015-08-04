@@ -2,7 +2,7 @@
 #' 
 #' @import ggplot2
 #' @export
-plot_edits <- function(this) {
+plot.edit_table <- function(this) {
   
   # Rearrange levels of both Mismatch and Tissue in order to present
   #   from highest to lowest
