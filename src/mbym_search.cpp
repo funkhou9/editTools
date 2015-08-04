@@ -32,8 +32,8 @@ void mbym_search(CharacterMatrix& x, std::string rm_file) {
   
   
   std::vector< std::vector<std::string> > mat;
-  std::vector< std::vector<std::string> >::iterator vvit_inner;
-  std::vector< std::vector<std::string> >::iterator vvit_outer;
+  std::vector< std::vector<std::string> >::iterator vvit_query;
+  std::vector< std::vector<std::string> >::iterator vvit_subject;
 
   std::vector< std::vector<std::string> > query_mat;
   
@@ -63,23 +63,24 @@ void mbym_search(CharacterMatrix& x, std::string rm_file) {
     query_mat.push_back(vect_q);
   }
 
-  for (vvit_inner = query_mat.begin(); vvit_inner != query_mat.end(); vvit_inner++) {
-    for (vvit_outer = mat.begin(); vvit_outer != mat.end(); vvit_outer++) {
+  for (vvit_query = query_mat.begin(); vvit_query != query_mat.end(); vvit_query++) {
+    for (vvit_subject = mat.begin(); vvit_subject != mat.end(); vvit_subject++) {
     
-      if (("chr" + vvit_inner->at(0)) == vvit_outer->at(4) &&
-          (std::stol(vvit_inner->at(1)) >= std::stol(vvit_outer->at(5)) && std::stol(vvit_inner->at(1)) <= std::stol(vvit_outer->at(6)))) {
+      if (("chr" + vvit_query->at(0)) == vvit_subject->at(4) &&
+          (std::stol(vvit_query->at(1)) >= std::stol(vvit_subject->at(5)) && std::stol(vvit_query->at(1)) <= std::stol(vvit_subject->at(6)))) {
         
-        std::string start = vvit_outer->at(5);
-        std::string end = vvit_outer->at(6);
-        std::string repeat = vvit_outer->at(9);
-        std::string family = vvit_outer->at(10);
+        std::string start = vvit_subject->at(5);
+        std::string end = vvit_subject->at(6);
+        std::string repeat = vvit_subject->at(9);
+        std::string family = vvit_subject->at(10);
         
-        (*vvit_inner).push_back(start);
-        (*vvit_inner).push_back(end);
-        (*vvit_inner).push_back(repeat);
-        (*vvit_inner).push_back(family);
+        (*vvit_query).push_back(start);
+        (*vvit_query).push_back(end);
+        (*vvit_query).push_back(repeat);
+        (*vvit_query).push_back(family);
         
-        Rcout << (*vvit_inner) << std::endl;
+        Rcout << (*vvit_query) << std::endl;
+        break;
       }
     }
   }
