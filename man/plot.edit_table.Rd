@@ -4,7 +4,14 @@
 \alias{plot.edit_table}
 \title{A plotting tool to visualize DNA RNA mismatch counts from an edit_frame}
 \usage{
-\method{plot}{edit_table}(this)
+\method{plot}{edit_table}(this, field = "AllSites")
+}
+\arguments{
+\item{this}{an edit_table object}
+
+\item{character}{naming member of edit_table to plot. A barplot is produced
+for members $AllSites, $RepSites, $mirnaTargetSites, and $VEP. A Venn Diagram
+is produced for member $Tissues}
 }
 \description{
 A plotting tool to visualize DNA RNA mismatch counts from an edit_frame
