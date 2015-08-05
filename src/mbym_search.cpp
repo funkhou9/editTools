@@ -28,7 +28,18 @@ std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field)
 
 
 // [[Rcpp::export]]
-void mbym_search(CharacterMatrix& x, std::string rm_file) {
+void mbym_search(CharacterMatrix& x,
+                 std::string rm_file,
+                 int s_chr,
+                 int s_start,
+                 int s_end,
+                 int item_1,
+                 int item_2,
+                 int item_3,
+                 int item_4,
+                 bool stranded = false,
+                 int s_strand = 5)
+{
   
   
   std::vector< std::vector<std::string> > mat;
@@ -62,25 +73,38 @@ void mbym_search(CharacterMatrix& x, std::string rm_file) {
     
     query_mat.push_back(vect_q);
   }
-
+  
   for (vvit_query = query_mat.begin(); vvit_query != query_mat.end(); vvit_query++) {
     for (vvit_subject = mat.begin(); vvit_subject != mat.end(); vvit_subject++) {
     
-      if (("chr" + vvit_query->at(0)) == vvit_subject->at(4) &&
-          (std::stol(vvit_query->at(1)) >= std::stol(vvit_subject->at(5)) && std::stol(vvit_query->at(1)) <= std::stol(vvit_subject->at(6)))) {
+      if (("chr" + vvit_query->at(0)) == vvit_subject->at(s_chr) &&
+          (std::stol(vvit_query->at(1)) >= std::stol(vvit_subject->at(s_start)) &&
+          std::stol(vvit_query->at(1)) <= std::stol(vvit_subject->at(s_end)))) {
         
-        std::string start = vvit_subject->at(5);
-        std::string end = vvit_subject->at(6);
-        std::string repeat = vvit_subject->at(9);
-        std::string family = vvit_subject->at(10);
+        std::string pos1 = vvit_subject->at(item_1);
+        std::string pos2 = vvit_subject->at(item_2);
+        std::string repeat = vvit_subject->at(item_3);
+        std::string family = vvit_subject->at(item_4);
         
-        (*vvit_query).push_back(start);
-        (*vvit_query).push_back(end);
+        (*vvit_query).push_back(pos1);
+        (*vvit_query).push_back(pos2);
         (*vvit_query).push_back(repeat);
         (*vvit_query).push_back(family);
         
-        Rcout << (*vvit_query) << std::endl;
-        break;
+        if (stranded) {
+          
+          if (vvit_query->at(2) == vvit_subject->at(s_strand)) {
+    
+            Rcout << (*vvit_query) << std::endl;
+            break;
+          
+          } else break;
+          
+        } else {
+          
+          Rcout << (*vvit_query) << std::endl;
+          break;
+        }
       }
     }
   }

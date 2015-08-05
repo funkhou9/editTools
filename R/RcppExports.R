@@ -7,7 +7,7 @@ edit_search <- function(file, strand, names, ex_indel, geno_dp, geno_hom, edit_d
     invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh))
 }
 
-mbym_search <- function(x, rm_file) {
-    invisible(.Call('editTools_mbym_search', PACKAGE = 'editTools', x, rm_file))
+mbym_search <- function(x, rm_file, s_chr, s_start, s_end, item_1, item_2, item_3, item_4, stranded = FALSE, s_strand = 5L) {
+    invisible(.Call('editTools_mbym_search', PACKAGE = 'editTools', x, rm_file, s_chr, s_start, s_end, item_1, item_2, item_3, item_4, stranded, s_strand))
 }
 
