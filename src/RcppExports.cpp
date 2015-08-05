@@ -23,13 +23,22 @@ BEGIN_RCPP
 END_RCPP
 }
 // mbym_search
-void mbym_search(CharacterMatrix& x, std::string rm_file);
-RcppExport SEXP editTools_mbym_search(SEXP xSEXP, SEXP rm_fileSEXP) {
+void mbym_search(CharacterMatrix& x, std::string rm_file, int s_chr, int s_start, int s_end, int item_1, int item_2, int item_3, int item_4, bool stranded, int s_strand);
+RcppExport SEXP editTools_mbym_search(SEXP xSEXP, SEXP rm_fileSEXP, SEXP s_chrSEXP, SEXP s_startSEXP, SEXP s_endSEXP, SEXP item_1SEXP, SEXP item_2SEXP, SEXP item_3SEXP, SEXP item_4SEXP, SEXP strandedSEXP, SEXP s_strandSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< CharacterMatrix& >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type rm_file(rm_fileSEXP);
-    mbym_search(x, rm_file);
+    Rcpp::traits::input_parameter< int >::type s_chr(s_chrSEXP);
+    Rcpp::traits::input_parameter< int >::type s_start(s_startSEXP);
+    Rcpp::traits::input_parameter< int >::type s_end(s_endSEXP);
+    Rcpp::traits::input_parameter< int >::type item_1(item_1SEXP);
+    Rcpp::traits::input_parameter< int >::type item_2(item_2SEXP);
+    Rcpp::traits::input_parameter< int >::type item_3(item_3SEXP);
+    Rcpp::traits::input_parameter< int >::type item_4(item_4SEXP);
+    Rcpp::traits::input_parameter< bool >::type stranded(strandedSEXP);
+    Rcpp::traits::input_parameter< int >::type s_strand(s_strandSEXP);
+    mbym_search(x, rm_file, s_chr, s_start, s_end, item_1, item_2, item_3, item_4, stranded, s_strand);
     return R_NilValue;
 END_RCPP
 }
