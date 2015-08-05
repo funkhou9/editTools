@@ -7,7 +7,7 @@
 add_repeatmask <- function(this, rm_file) {
   
   mod_result <-
-    capture.output(mbym_search(as.matrix(this$AllSites), rm_file)) %>%
+    capture.output(mbym_search(as.matrix(this$AllSites), rm_file, 4, 5, 6, 5, 6, 9, 10)) %>%
       sapply(function(x) strsplit(x, split = '\t')) %>%
         do.call(rbind, .) %>%
           as.data.frame(stringsAsFactors = FALSE)
@@ -25,9 +25,9 @@ add_repeatmask <- function(this, rm_file) {
                             "Family",
                             "Tissue")
   
-  new_result <- list("AllSites" = this$AllSites,
-                     "RepSites" = mod_result,
-                     "Tissues" = this$Tissues)
+  new_result <- append(this,
+                      list("RepSites" = mod_result),
+                      1)
   
   class(new_result) <- "edit_table"
   
