@@ -2,18 +2,27 @@
 % Please edit documentation in R/plot.edit_table.R
 \name{plot.edit_table}
 \alias{plot.edit_table}
-\title{A plotting tool to visualize DNA RNA mismatch counts from an edit_frame}
+\title{A plotting tool to visualize data from an edit_frame object}
 \usage{
-\method{plot}{edit_table}(this, field = "AllSites")
+\method{plot}{edit_table}(this, field = "AllSites", event = "Mismatch",
+  mismatch = "all", n = NULL)
 }
 \arguments{
 \item{this}{an edit_table object}
 
-\item{character}{naming member of edit_table to plot. A barplot is produced
+\item{field}{character naming member of edit_table to plot. A barplot is produced
 for members $AllSites, $RepSites, $mirnaTargetSites, and $VEP. A Venn Diagram
 is produced for member $Tissues}
+
+\item{event}{character naming which column from field to count}
+
+\item{mismatch}{character indicating which type of mismatch to consider, such as "AtoG".
+By default, considers all mismatch types}
+
+\item{n}{integer limiting number of events to n. Any number of events beyond
+n will be grouped into "other" category}
 }
 \description{
-A plotting tool to visualize DNA RNA mismatch counts from an edit_frame
+A plotting tool to visualize data from an edit_frame object
 }
 
