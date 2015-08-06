@@ -96,21 +96,17 @@ find_edits <- function(file_plus,
   
   result[, "Pos"] <- as.numeric(result[, "Pos"])
   result <- result[order(result[, "Chr"], result[,"Pos"]), ]
-
   rownames(result) <- NULL
   
-  # Produce mismatch counts for each tissue sample
-  #   Guards against the possibility that a tissue sample contained no edits
-  tissues_w_edits <- names [names %in% result$Tissue]
+  result <- list("AllSites" = result)
+
+  # Use count_mismatch() to get counts of each mismatch for each tissue
+  mismatch_cnts <- count_mismatch(result$AllSites)
   
-  mismatches <- lapply(tissues_w_edits,
-                       count_mismatch,
-                       result)
-  names(mismatches) <- tissues_w_edits
-  
+
   # Append mismatch counts to existing results and declare class
-  result <- list("AllSites" = result,
-                 "Tissues" = mismatches)
+  result <- append(result,
+                   list("Tissues" = mismatch_cnts))
   
   class(result) <- "edit_table"
   return (result)
