@@ -41,8 +41,8 @@ count_mismatch <- function(this_field,
                       as.data.frame(stringsAsFactors = FALSE)
                
              
-             if (wname) tab <- cbind(tab, x, stringsAsFactors = FALSE) 
-             colnames(tab) <- c(event, "Freq", "Tissue")
+             if (wname) tab <- cbind(tab, "Tissue" = x, stringsAsFactors = FALSE) 
+             colnames(tab)[1:2] <- c(event, "Freq")
              
              # Reorder events with most common on top
              tab <- tab [order(tab$Freq, decreasing = TRUE), ]
