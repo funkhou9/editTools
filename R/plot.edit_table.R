@@ -99,11 +99,11 @@ plot.edit_table <- function(this,
     event_dat[type_idx, "Total_prop"] <- total_prop
   
 
-  
-    ggplot(event_dat,
-           aes(x = reorder(Event, -Freq),
-               y = Freq,
-               fill = reorder(Tissue, Freq))) +
+    g_plot <-
+      ggplot(event_dat,
+             aes(x = reorder(Event, -Freq),
+                 y = Freq,
+                 fill = reorder(Tissue, Freq))) +
       geom_bar(stat = 'identity') +
       geom_text(aes(label = Total_prop),
                 na.rm = TRUE,
@@ -123,4 +123,6 @@ plot.edit_table <- function(this,
             legend.title = element_text(size=15)) +
       guides(fill = guide_legend(title = "Tissues"))
   }
+  
+  return (g_plot)
 }
