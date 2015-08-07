@@ -37,6 +37,7 @@ std::vector< std::string > parse_v(const std::string& line,
 char delim_samp = ':';
 char delim_pl = ',';
 
+
 /***************************************** 
  * Global << overloadings 
  * To print a vector of strings
@@ -59,10 +60,10 @@ class Rna
    * rna_dv - sequencing depth in support of variant
    * call - base call
    * diff_flag - true if call differs from corresponding
-      DNA sample
+   *  DNA sample
    * depth_flag - if edit depth meets criteria
    * likelihood_flag - if samples genotype likelihoods
-      meet criteria
+   *  meet criteria
    * edit_frac - proportion of reads that support edit
    **************************************************/
 
@@ -77,6 +78,7 @@ public:
   bool depth_flag;
   bool likelihood_flag;
   double edit_frac;
+
   
 public:
   Rna(const std::string& line, std::string tissue_name)
@@ -114,7 +116,7 @@ class Variant
    * filter = processed by other software... ?
    * info = ';' delimited sequence of additional information
    * format = ';' delimited sequence listing how dna_call and rna_call
-   *  should be read 
+   *  should be read
    ************************************************************/
   
   std::string chrom;
@@ -288,6 +290,7 @@ public:
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
       if (it->depth_flag && it->diff_flag && it->likelihood_flag)
+        
         return true;
     }
     
