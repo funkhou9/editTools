@@ -88,10 +88,8 @@ find_edits <- function(file_plus,
                         "Pos",
                         "Strand",
                         "Mismatch",
-                        "DNA_DP",
-                        "DNA_DV",
-                        "RNA_DP",
-                        "RNA_DV",
+                        "DNA_Depth",
+                        "RNA_edit_frac",
                         "Tissue")
   
   result[, "Pos"] <- as.numeric(result[, "Pos"])
@@ -107,6 +105,7 @@ find_edits <- function(file_plus,
   # Append mismatch counts to existing results and declare class
   result <- append(result,
                    list("Tissues" = mismatch_cnts))
+
   
   class(result) <- "edit_table"
   return (result)

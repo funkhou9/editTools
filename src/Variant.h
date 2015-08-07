@@ -51,12 +51,19 @@ class Rna
 {
   
   /**************************************************
-   * Representing a single RNA sample in a VCF file
+   * Representing a single RNA locus in a VCF file
    * 
-   * rna_gt coded genotype for a variant
-   * rna_pl ...
-   * rna_dp total sequencing depth for a variant
-   * rna_dv sequencing depth in support of variant
+   * rna_gt - coded genotype for a variant
+   * rna_pl - genotype likelihood
+   * rna_dp - total sequencing depth for a variant
+   * rna_dv - sequencing depth in support of variant
+   * call - base call
+   * diff_flag - true if call differs from corresponding
+      DNA sample
+   * depth_flag - if edit depth meets criteria
+   * likelihood_flag - if samples genotype likelihoods
+      meet criteria
+   * edit_frac - proportion of reads that support edit
    **************************************************/
 
 public:     
@@ -69,6 +76,7 @@ public:
   bool diff_flag;
   bool depth_flag;
   bool likelihood_flag;
+  double edit_frac;
   
 public:
   Rna(const std::string& line, std::string tissue_name)
@@ -225,14 +233,20 @@ public:
   {
     if (dna_gt == "0/0")
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
+        
+        it->edit_frac = it->rna_dv / it->rna_dp;
         if (it->rna_dv >= depth)
           it->depth_flag = true;
+          
       }
         
     else
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
+        
+        it->edit_frac = (it->rna_dp - it->rna_dv) / it->rna_dp;
         if (it->rna_dp - it->rna_dv >= depth)
           it->depth_flag = true;
+          
       }
   }
 
@@ -344,8 +358,7 @@ public:
       if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << "to" << it->call << '\t' << var.dna_dp << '\t' <<
-            var.dna_dv << '\t' << it->rna_dp << '\t' << it->rna_dv << '\t' <<
-              it->tissue_name << std::endl;
+            it->edit_frac << '\t' << it->tissue_name << std::endl;
     }
     
     return os;
