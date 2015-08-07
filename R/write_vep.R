@@ -11,7 +11,7 @@ write_vep <- function(this, file="edits.vep") {
   vep <- data.frame(this$AllSites[, "Chr"],
                     this$AllSites[, "Pos"],
                     this$AllSites[, "Pos"],
-                    this$AllSites[, "Mismatch"],
+                    gsub("to", "/", this$AllSites[, "Mismatch"]),
                     this$AllSites[, "Strand"],
                     this$AllSites[, "Tissue"])
   
