@@ -77,13 +77,15 @@ find_edits <- function(file_plus,
     
     # Some df formatting -
     # 1. Combine plus strand and minus strand results
-    # 2. Format sample_names arg into a usable header, apply header
-    # 3. Enusre POS is numeric, then reorder by CHROM, then POS
-    # 4. Remove rownames
+    # 2. Ensure POS is numeric, then reorder by CHROM, then POS
+    # 3. Remove rownames
     result <- rbind(plus, minus)
   } else
     result <- plus
 
+  # Add an "ID" column
+  result <- cbind(seq_along(result[, 1]), result)
+  
   colnames(result) <- c("ID",
                         "Chr",
                         "Pos",
