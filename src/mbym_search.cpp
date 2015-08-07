@@ -2,6 +2,8 @@
 using namespace Rcpp;
 
 #include <fstream>
+#include <string>
+#include <vector>
 
 
 std::vector< std::string > parse_r(const std::string& line)
@@ -77,9 +79,9 @@ void mbym_search(CharacterMatrix& x,
   for (vvit_query = query_mat.begin(); vvit_query != query_mat.end(); vvit_query++) {
     for (vvit_subject = mat.begin(); vvit_subject != mat.end(); vvit_subject++) {
     
-      if (("chr" + vvit_query->at(0)) == vvit_subject->at(s_chr) &&
-          (std::stol(vvit_query->at(1)) >= std::stol(vvit_subject->at(s_start)) &&
-          std::stol(vvit_query->at(1)) <= std::stol(vvit_subject->at(s_end)))) {
+      if (("chr" + vvit_query->at(1)) == vvit_subject->at(s_chr) &&
+          (std::stol(vvit_query->at(2)) >= std::stol(vvit_subject->at(s_start)) &&
+          std::stol(vvit_query->at(2)) <= std::stol(vvit_subject->at(s_end)))) {
         
         std::string pos1 = vvit_subject->at(item_1);
         std::string pos2 = vvit_subject->at(item_2);
@@ -93,7 +95,7 @@ void mbym_search(CharacterMatrix& x,
         
         if (stranded) {
           
-          if (vvit_query->at(2) == vvit_subject->at(s_strand)) {
+          if (vvit_query->at(3) == vvit_subject->at(s_strand)) {
     
             Rcout << (*vvit_query) << std::endl;
             break;
