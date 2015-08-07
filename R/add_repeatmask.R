@@ -13,9 +13,10 @@ add_repeatmask <- function(this, rm_file) {
           as.data.frame(stringsAsFactors = FALSE)
   
   # Format output - replace sequence depth data with repeatmasker data
-  mod_result <- mod_result[, c(1, 2, 3, 4, 10, 11, 12, 13, 9)]
+  mod_result <- mod_result[, c(1, 2, 3, 4, 5, 9, 10, 11, 12, 8)]
   rownames(mod_result) <- NULL  
-  colnames(mod_result) <- c("Chr",
+  colnames(mod_result) <- c("ID",
+                            "Chr",
                             "Pos",
                             "Strand",
                             "Mismatch",

@@ -17,6 +17,7 @@ void edit_search(std::string file,
   std::string line;
   std::ifstream vcf1(file);
   std::vector< std::string > header;
+  unsigned long id = 1;
   
   std::vector< std::string > names_vec(names.size());
   for (int i = 0; i < names.size(); i++) {  
@@ -75,7 +76,8 @@ void edit_search(std::string file,
         Var.contains_edit()) {
       
       Var.call_samples();
-      Rcout << Var;
+      Rcout << id << '\t' << Var;
+      id++;
     }
   }
 }

@@ -71,9 +71,9 @@ find_edits <- function(file_plus,
                                         geno_hom,
                                         edit_dp,
                                         edit_likelihood)) %>%
-      sapply(function(x) strsplit(x, split = '\t')) %>%
-      do.call(rbind, .) %>%
-      as.data.frame(stringsAsFactors = FALSE)
+              sapply(function(x) strsplit(x, split = '\t')) %>%
+                do.call(rbind, .) %>%
+                  as.data.frame(stringsAsFactors = FALSE)
     
     # Some df formatting -
     # 1. Combine plus strand and minus strand results
@@ -84,7 +84,8 @@ find_edits <- function(file_plus,
   } else
     result <- plus
 
-  colnames(result) <- c("Chr",
+  colnames(result) <- c("ID",
+                        "Chr",
                         "Pos",
                         "Strand",
                         "Mismatch",
