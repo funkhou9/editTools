@@ -9,44 +9,36 @@
 #'  By default, considers all mismatch types
 #' @param n integer limiting number of events to n. Any number of events beyond
 #'  n will be grouped into "other" category
+#' @param plot logical where TRUE returns a gg plot object. False returns the modified data.frame from
+#'  which the gg object is constructed from. False can be used to combine datasets for "facet plotting".
+#' @param x_label character providing label for x axis
+#' @param y_label character providing label for y axis
+#' @param denom_all logical. If true, percentage labels will always be
+#'  out of the total number of edits found. If false, only the number of edits
+#'  in field will be considered.
 #' @import ggplot2
-#' @import grid
-#' @import VennDiagram
 #' @export
 plot.edit_table <- function(this,
                             field = "AllSites",
                             event = "Mismatch",
                             mismatch = "all",
-                            n = NULL) {
+                            group = "Tissue",
+                            n = NULL,
+                            text_size = 20,
+                            perc_size = 10,
+                            plot = TRUE,
+                            x_label = "Mismatch type",
+                            y_label = "Number of events",
+                            denom_all = FALSE) {
   
   member <- this[[field]]
   
 
-  if (field == "Tissues") {
-
-    positions <- 
-      lapply(tiss_names,
-             function(x) {
-               paste(this$AllSites[this$AllSites$Tissue == x, "Chr"],
-                     this$AllSites[this$AllSites$Tissue == x, "Pos"],
-                     this$AllSites[this$AllSites$Tissue == x, "Strand"],
-                     this$AllSites[this$AllSites$Tissue == x, "Mismatch"])
-             })
+  if (field == "Tissues")
+    stop("Please use tissue_plot() to visulize tissue mismatches with a venn diagram")
+  
     
-    names(positions) <- tiss_names
-    
-    venn <- venn.diagram(positions,
-                        filename = NULL,
-                        fill = rainbow(length(tiss_names)),
-                        alpha = 0.65,
-                        cat.cex = 2,
-                        cex = 2.5,
-                        cat.fontfamily = "Arial")
-    
-    plot.new()
-    grid.draw(venn)
-    
-  } else {
+  else {
     
     # Obtain each tissue summary with added args to count_match()
     event_dat <- count_mismatch(member,
@@ -54,7 +46,6 @@ plot.edit_table <- function(this,
                                 event = event,
                                 trim = n,
                                 mismatch = mismatch)
-    
     
     
     # Join list and ensure proper formatting needed for plotting
@@ -70,10 +61,22 @@ plot.edit_table <- function(this,
     # Each type of mismatch present in the dataset
     event_names <- unique(event_dat$Event) 
     
-    # Total num of events in all of data field
-    tot_cnt <- nrow(member)
+    # Total num of mismatches, or if mismatch is specified, total number of
+    #   mismatches of the specified type.
+    if (mismatch != "all")
+      tot_cnt <- nrow(member[member$Mismatch == mismatch, ])
+    else 
+      tot_cnt <- nrow(member)
     
-
+    # If denom_all is true, then tot_cnt should be the total number of
+    #   mismatches rather than just those in member
+    if (denom_all) {
+      if (mismatch != "all")
+      tot_cnt <- nrow(this$AllSites[this$AllSites$Mismatch == mismatch, ])
+    else 
+      tot_cnt <- nrow(this$AllSites)
+    }
+    
     # Obtain total proportions of each edit across each tissue,
     #   these are used as labels within the plot
     total_prop <- 
@@ -98,31 +101,54 @@ plot.edit_table <- function(this,
     # Add total_prop to each row of event_dat, appropriately
     event_dat[type_idx, "Total_prop"] <- total_prop
   
+    # Lastly, to enable grouping, rename column with name
+    #   <group> to "group"
+    if (group != "none") {
+      i <- which(colnames(event_dat) == group)
+      colnames(event_dat)[i] <- "group"
+    }
+      
 
-    g_plot <-
-      ggplot(event_dat,
-             aes(x = reorder(Event, -Freq),
-                 y = Freq,
-                 fill = reorder(Tissue, Freq))) +
-      geom_bar(stat = 'identity') +
-      geom_text(aes(label = Total_prop),
-                na.rm = TRUE,
-                position = "stack",
-                hjust = 0.5,
-                vjust= -0.2) +
-      ylab("Number of events") +
-      xlab("Type of mismatch") +
-      theme(axis.title.x = element_text(size=15),
-            axis.title.y = element_text(size=15),
-            axis.text.x = element_text(angle = 45,
-                                       hjust = 1,
-                                       size=15),
-            axis.text.y = element_text(size=15),
-            strip.text.x = element_text(size=15),
-            legend.text = element_text(size=15),
-            legend.title = element_text(size=15)) +
-      guides(fill = guide_legend(title = "Tissues"))
+    
+    if (group != "none") {
+      g <- ggplot(event_dat,
+                  aes(x = reorder(Event, -Freq),
+                      y = Freq,
+                      fill = reorder(group, Freq)))
+      g <- g + geom_bar(stat = 'identity')
+      
+    } else {
+      g <- ggplot(event_dat,
+                  aes(x = reorder(Event, -Freq),
+                      y = Freq))
+      g <- g + geom_bar(stat = "identity",
+                        fill = I("#18453B"),
+                        color = I("#18453B"))
+    }
+    
+    
+    
+    g <- g + geom_text(aes(label = Total_prop),
+                       na.rm = TRUE,
+                       position = "stack",
+                       hjust = 0.5,
+                       vjust= -0.2,
+                       size = perc_size)
+    g <- g + ylab(y_label)
+    g <- g + xlab(x_label)
+    g <- g + theme(axis.title.x = element_text(size = text_size),
+                   axis.title.y = element_text(size = text_size),
+                   axis.text.x = element_text(angle = 45,
+                                              hjust = 1,
+                                              size = text_size),
+                   axis.text.y = element_text(size = text_size),
+                   legend.text = element_text(size = text_size),
+                   legend.title = element_text(size = text_size),
+                   legend.key.height = unit(3, "line"))
+    g <- g + guides(fill = guide_legend(title = "Tissues"))
   }
-  
-  return (g_plot)
+  if (plot)
+    return (g)
+  else
+    return (cbind(event_dat, field))
 }
