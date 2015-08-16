@@ -5,7 +5,9 @@
 \title{A plotting tool to visualize data from an edit_frame object}
 \usage{
 \method{plot}{edit_table}(this, field = "AllSites", event = "Mismatch",
-  mismatch = "all", n = NULL)
+  mismatch = "all", group = "Tissue", n = NULL, text_size = 20,
+  perc_size = 10, plot = TRUE, x_label = "Mismatch type",
+  y_label = "Number of events", denom_all = FALSE)
 }
 \arguments{
 \item{this}{an edit_table object}
@@ -21,6 +23,17 @@ By default, considers all mismatch types}
 
 \item{n}{integer limiting number of events to n. Any number of events beyond
 n will be grouped into "other" category}
+
+\item{plot}{logical where TRUE returns a gg plot object. False returns the modified data.frame from
+which the gg object is constructed from. False can be used to combine datasets for "facet plotting".}
+
+\item{x_label}{character providing label for x axis}
+
+\item{y_label}{character providing label for y axis}
+
+\item{denom_all}{logical. If true, percentage labels will always be
+out of the total number of edits found. If false, only the number of edits
+in field will be considered.}
 }
 \description{
 A plotting tool to visualize data from an edit_frame object
