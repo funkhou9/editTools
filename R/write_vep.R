@@ -13,7 +13,10 @@ write_vep <- function(this, file="edits.vep") {
                     this$AllSites[, "Pos"],
                     gsub("to", "/", this$AllSites[, "Mismatch"]),
                     this$AllSites[, "Strand"],
-                    this$AllSites[, "Tissue"])
+                    paste(this$AllSites[, "Tissue"],
+                          this$AllSites[, "Mismatch"],
+                          this$AllSites[, "ID"],
+                          sep = ":"))
   
   write.table(vep,
               file = file,
