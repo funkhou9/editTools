@@ -5,7 +5,7 @@
 \title{Plotting tool to produce venn diagrams showing off tissue specific mismatch counts}
 \usage{
 tissue_plot(this, field = "AllSites", fill_colors = "green",
-  mismatch = "all")
+  cex_labels = 2, cex_counts = 3.5, mismatch = "all")
 }
 \arguments{
 \item{this}{an edit_table object}
@@ -14,6 +14,13 @@ tissue_plot(this, field = "AllSites", fill_colors = "green",
 $RepSites, or $mirnaTargetSites) from which to obtain counts from}
 
 \item{fill_colors}{character vector specifying colors for each tissue}
+
+\item{cex_labels}{numeric specifying size of tissue labels}
+
+\item{cex_counts}{numeric specifying size of mismatch counts}
+
+\item{mismatch}{character. "all" counts all mismatches. Specific mismatches
+can be specified, for example "AtoG".}
 }
 \description{
 Plotting tool to produce venn diagrams showing off tissue specific mismatch counts

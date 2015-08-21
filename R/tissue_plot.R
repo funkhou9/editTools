@@ -4,6 +4,10 @@
 #' @param field character naming edit_table field (either $AllSites,
 #'  $RepSites, or $mirnaTargetSites) from which to obtain counts from
 #' @param fill_colors character vector specifying colors for each tissue
+#' @param cex_labels numeric specifying size of tissue labels
+#' @param cex_counts numeric specifying size of mismatch counts
+#' @param mismatch character. "all" counts all mismatches. Specific mismatches
+#'  can be specified, for example "AtoG".
 #' @return NULL
 #' @import VennDiagram
 #' @import grid
@@ -11,6 +15,8 @@
 tissue_plot <- function(this,
                         field = "AllSites",
                         fill_colors = "green",
+                        cex_labels = 2,
+                        cex_counts = 3.5,
                         mismatch = "all") {
   
   member <- this[[field]]
@@ -43,8 +49,8 @@ tissue_plot <- function(this,
                        filename = NULL,
                        fill = fill_colors,
                        alpha = 0.7,
-                       cat.cex = 2,
-                       cex = 3.5,
+                       cat.cex = cex_labels,
+                       cex = cex_counts,
                        cat.fontfamily = "Helvetica",
                        sub.fontfamily = "Helvetica")
 
