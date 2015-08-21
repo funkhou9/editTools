@@ -9,13 +9,15 @@
 #'  "AllSites" to consider all mismatches, "Repsites" to consider
 #'  only mismatches within repetitive regions, and "mirnaTargetSites"
 #'  to consider only mismatches in putative 3'UTR mirna Target sites
-#' @param use.nonAtoG logical
+#' @param use.nonAtoG logical. Do you want to group all non AtoG mismatches together?
+#' @param line_size numeric specifying size of lines in plot
 #' @return a ggplot functional
 #' @export
 edit_prop_plot <- function(this,
                            field = "AllSites",
                            use.nonAtoG = TRUE,
-                           text_size = 20) {
+                           text_size = 20,
+                           line_size = 2) {
   
   member <- this[[field]]
   
@@ -38,7 +40,7 @@ edit_prop_plot <- function(this,
               aes(RNA_edit_frac, color = Mismatch))
   
   g <- g + geom_freqpoly(fill = "transparent",
-                         size = 2)
+                         size = line_size)
   g <- g + ylab("Count")
   g <- g + xlab("Mismatch Proportion")
   g <- g + theme(axis.title.x = element_text(size = text_size),

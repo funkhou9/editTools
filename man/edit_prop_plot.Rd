@@ -5,7 +5,7 @@
 \title{Plots distributions of mismatch fractions}
 \usage{
 edit_prop_plot(this, field = "AllSites", use.nonAtoG = TRUE,
-  text_size = 20)
+  text_size = 20, line_size = 2)
 }
 \arguments{
 \item{this}{an edit_table object}
@@ -15,7 +15,9 @@ edit_prop_plot(this, field = "AllSites", use.nonAtoG = TRUE,
 only mismatches within repetitive regions, and "mirnaTargetSites"
 to consider only mismatches in putative 3'UTR mirna Target sites}
 
-\item{use.nonAtoG}{logical}
+\item{use.nonAtoG}{logical. Do you want to group all non AtoG mismatches together?}
+
+\item{line_size}{numeric specifying size of lines in plot}
 }
 \value{
 a ggplot functional
