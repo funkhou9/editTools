@@ -7,7 +7,7 @@
 \method{plot}{edit_table}(this, field = "AllSites", event = "Mismatch",
   mismatch = "all", group = "Tissue", n = NULL, text_size = 20,
   perc_size = 10, plot = TRUE, x_label = "Mismatch type",
-  y_label = "Number of events", denom_all = FALSE)
+  y_label = "Number of events", y_range = "auto", denom_all = FALSE)
 }
 \arguments{
 \item{this}{an edit_table object}
@@ -30,6 +30,8 @@ which the gg object is constructed from. False can be used to combine datasets f
 \item{x_label}{character providing label for x axis}
 
 \item{y_label}{character providing label for y axis}
+
+\item{y_range}{numeric vector providing min and max of y axis range}
 
 \item{denom_all}{logical. If true, percentage labels will always be
 out of the total number of edits found. If false, only the number of edits

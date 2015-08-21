@@ -13,6 +13,7 @@
 #'  which the gg object is constructed from. False can be used to combine datasets for "facet plotting".
 #' @param x_label character providing label for x axis
 #' @param y_label character providing label for y axis
+#' @param y_range numeric vector providing min and max of y axis range
 #' @param denom_all logical. If true, percentage labels will always be
 #'  out of the total number of edits found. If false, only the number of edits
 #'  in field will be considered.
@@ -29,6 +30,7 @@ plot.edit_table <- function(this,
                             plot = TRUE,
                             x_label = "Mismatch type",
                             y_label = "Number of events",
+                            y_range = "auto",
                             denom_all = FALSE) {
   
   member <- this[[field]]
@@ -136,6 +138,8 @@ plot.edit_table <- function(this,
                        size = perc_size)
     g <- g + ylab(y_label)
     g <- g + xlab(x_label)
+    if (y_range[1] != "auto")
+      g <- g + coord_cartesian(ylim = y_range)
     g <- g + theme(axis.title.x = element_text(size = text_size),
                    axis.title.y = element_text(size = text_size),
                    axis.text.x = element_text(angle = 45,
