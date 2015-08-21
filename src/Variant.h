@@ -38,15 +38,6 @@ char delim_samp = ':';
 char delim_pl = ',';
 
 
-/***************************************** 
- * Global << overloadings 
- * To print a vector of strings
- *  
- *  See definitions below
- *****************************************/
-
-// std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field);
-
 
 class Rna
 {
@@ -373,14 +364,6 @@ public:
 /************************************************************ 
  * Global definitions
  ************************************************************/
-
-// std::ostream& operator<<(std::ostream& os, std::vector< std::string >& field)
-// {
-//   for (std::vector< std::string >::const_iterator it = field.begin(); it != field.end(); it++) {
-//     os << *it << '\t';
-//   }
-//   return os;
-// }
 
 
 std::vector< std::string > parse_v(const std::string& line)
