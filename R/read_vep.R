@@ -32,7 +32,13 @@ read_vep <- function(file) {
   conseq <- tab[, "Consequence"]
   biotype <- tab[, "BIOTYPE"]
   strand <- tab[, "STRAND"]
-  gene <- tab[, "SYMBOL"]
+  gene_symbol <- tab[, "SYMBOL"]
+  gene <- tab[, "Gene"]
+  trembl <- tab[, "TREMBL"]
+  impact <- tab[, "IMPACT"]
+  aa <- tab[, "Amino_acids"]
+  sift <- tab[, "SIFT"]
+  
   
   # Modify strand to adapt previous '-' and '+' format
   ###
@@ -45,10 +51,15 @@ read_vep <- function(file) {
         "Pos" = cp[, 2],
         "Strand" = strand,
         "Mismatch" = tmi[, 2],
+        "Gene_symbol" = gene_symbol,
         "Gene" = gene,
+        "Trembl" = trembl,
         "Biotype" = biotype,
         "Consequence" = conseq,
-        "Tissue" = tmi[, 1]) %>%
+        "Tissue" = tmi[, 1],
+        "Impact" = impact,
+        "Amino_acids" = aa,
+        "SIFT" = sift) %>%
     as.data.frame(stringsAsFactors = FALSE)
   
 }
