@@ -4,7 +4,7 @@
 #' @param file character giving desired output file
 #' @return none
 #' @export
-write_vep <- function(this, file="edits.vep") {
+write_vep <- function(this, file = "edits.vep") {
   
   # VEP expects two positions. A range indicates an indel. Identical
   #   positions indicate a SNP
