@@ -1,4 +1,4 @@
-# Counts events for a single tissue sample
+# Counts events for each tissue sample present in this_field
 #
 # @param this_field. Not an edit_table object but a field of an edit_table object, such as
 #   this$AllSites or all$RepSites
