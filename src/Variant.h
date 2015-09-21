@@ -239,7 +239,7 @@ public:
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
         it->edit_dp = it->rna_dv;
         it->edit_frac = it->edit_dp / it->rna_dp;
-        if (it->rna_dv >= depth)
+        if (it->edit_dp >= depth)
           it->depth_flag = true;
       }
         
@@ -247,7 +247,7 @@ public:
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
         it->edit_dp = it->rna_dp - it->rna_dv;
         it->edit_frac = it->edit_dp / it->rna_dp;
-        if (it->rna_dv >= depth)
+        if (it->edit_dp >= depth)
           it->depth_flag = true;
       }
   }
