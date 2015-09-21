@@ -23,7 +23,7 @@ using namespace Rcpp;
  *  1. Provide a string
  *  2. Provide a string and a delimiter
  *  
- *  See definitions below
+ *  See definitions at bottom of file
  **********************************************************/
 
 // Intended for general space separated fields
@@ -36,6 +36,8 @@ std::vector< std::string > parse_v(const std::string& line,
 
 char delim_samp = ':';
 char delim_pl = ',';
+char delim_info = ';';
+char delim_equals = '=';
 
 
 
@@ -58,12 +60,13 @@ class Rna
    * edit_frac - proportion of reads that support edit
    **************************************************/
 
-public:     
+public:
   std::string tissue_name;
   std::string rna_gt;
   std::vector< std::string > rna_pl;
   double rna_dp;
   double rna_dv;
+  double edit_dp;
   std::string call;
   bool diff_flag;
   bool depth_flag;
@@ -122,6 +125,7 @@ class Variant
   std::list< Rna > rna_list;
   std::string call;
   bool geno_likelihood_flag;
+  int ave_mq;
   
   // Additional variable for strand ID, 
   //  either '+' or '-'.
@@ -138,7 +142,7 @@ public:
     // Parse whole line into 'general' fields
     std::vector< std::string > gen_set = parse_v(line);
     
-    // Distribute attr_set elements
+    // Distribute gen_set elements
     this->chrom = gen_set[0];
     this->pos = std::stol(gen_set[1]);
     this->ref = gen_set[3];
@@ -154,6 +158,12 @@ public:
     this->dna_pl = parse_v(dna_call[1], delim_pl);
     this->dna_dp = std::stod(dna_call[2]);
     this->dna_dv = std::stod(dna_call[3]);
+    
+    // Search info field for helpful tags
+    std::vector< std::string > info = parse_v(gen_set[7],
+                                              delim_info);
+    
+    this->ave_mq = std::stoi(parse_v(info[13], delim_equals).at(1));
   }
   
   
@@ -224,26 +234,25 @@ public:
   //  supporting RNA editing is at least the depth specified
   void edit_depth_filter(int& depth)
   {
+    
     if (dna_gt == "0/0")
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-        
-        it->edit_frac = it->rna_dv / it->rna_dp;
+        it->edit_dp = it->rna_dv;
+        it->edit_frac = it->edit_dp / it->rna_dp;
         if (it->rna_dv >= depth)
           it->depth_flag = true;
-          
       }
         
     else
       for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-        
-        it->edit_frac = (it->rna_dp - it->rna_dv) / it->rna_dp;
-        if (it->rna_dp - it->rna_dv >= depth)
+        it->edit_dp = it->rna_dp - it->rna_dv;
+        it->edit_frac = it->edit_dp / it->rna_dp;
+        if (it->rna_dv >= depth)
           it->depth_flag = true;
-          
       }
   }
 
-  // Sufficient likelihood of RNA call? Next most likely genotype call must have a phred
+  // Sufficient likelihood of RNA call? Second most likely genotype call must have a phred
   //  scaled genotype likelihood greater than l.
   void likelihood_filter(int& l)
   {
@@ -352,7 +361,8 @@ public:
       if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << "to" << it->call << '\t' << var.dna_dp << '\t' <<
-            it->edit_frac << '\t' << it->tissue_name << std::endl;
+            it->rna_dp << '\t' << it->edit_dp << '\t' << it->edit_frac << '\t' << 
+              var.ave_mq << '\t' << it->tissue_name << std::endl;
     }
     
     return os;
