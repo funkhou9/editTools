@@ -13,7 +13,7 @@ add_repeatmask <- function(this, rm_file) {
           as.data.frame(stringsAsFactors = FALSE)
   
   # Format output - replace sequence depth data with repeatmasker data
-  mod_result <- mod_result[, c(1, 2, 3, 4, 5, 9, 10, 11, 12, 8)]
+  mod_result <- mod_result[, c(1, 2, 3, 4, 5, 12, 13, 14, 15, 11)]
   rownames(mod_result) <- NULL  
   colnames(mod_result) <- c("ID",
                             "Chr",
@@ -27,8 +27,8 @@ add_repeatmask <- function(this, rm_file) {
                             "Tissue")
   
   new_result <- append(this,
-                      list("RepSites" = mod_result),
-                      1)
+                       list("RepSites" = mod_result),
+                       1)
   
   class(new_result) <- "edit_table"
   
