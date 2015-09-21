@@ -45,7 +45,7 @@ find_edits <- function(file_plus,
   # 1. capture stdout,
   # 2. split by tab delimiter,
   # 3. store into matrix
-  # 4. conver to df
+  # 4. convert to df
   
   # Process plus file
   plus <- capture.output(edit_search(file_plus,
@@ -92,7 +92,10 @@ find_edits <- function(file_plus,
                         "Strand",
                         "Mismatch",
                         "DNA_Depth",
+                        "RNA_Depth",
+                        "Mismatch_Depth",
                         "RNA_edit_frac",
+                        "Ave_MQ",
                         "Tissue")
   
   result[, "Pos"] <- as.numeric(result[, "Pos"])
