@@ -163,7 +163,7 @@ public:
     std::vector< std::string > info = parse_v(gen_set[7],
                                               delim_info);
     
-    this->ave_mq = std::stoi(parse_v(info[13], delim_equals).at(1));
+    this->ave_mq = std::stoi(parse_v(info.back(), delim_equals).at(1));
   }
   
   
