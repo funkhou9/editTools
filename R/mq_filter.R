@@ -16,6 +16,6 @@ mq_filter <- function(this) {
   rna_dp <- as.numeric(this$AllSites$RNA_Depth)
   edit_dp <- as.numeric(this$AllSites$Mismatch_Depth)
   
-  # Estimate conditional probability P(X >= x | N, p(e)) using binomial model
+  # Estimate conditional probability P(X >= x | N, p(e)) ~ Binom(N, p(e))
   1 - pbinom(edit_dp, rna_dp, pe)
 }

@@ -289,7 +289,8 @@ public:
   bool contains_edit()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-      if (it->depth_flag && it->diff_flag && it->likelihood_flag)
+      // if (it->depth_flag && it->diff_flag && it->likelihood_flag)
+      if (it->depth_flag && it->diff_flag)
         
         return true;
     }
