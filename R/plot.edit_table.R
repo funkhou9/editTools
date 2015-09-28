@@ -7,8 +7,12 @@
 #' @param event character naming which column from field to count
 #' @param mismatch character indicating which type of mismatch to consider, such as "AtoG".
 #'  By default, considers all mismatch types
+#' @param group character selecting field to group (color code) by.
 #' @param n integer limiting number of events to n. Any number of events beyond
 #'  n will be grouped into "other" category
+#' @param text_size numeric giving the size of axis and legend labels.
+#' @param perc_size numeric giving the size of percent labels above bars.
+#' @param perc_round numeric giving decimal places that percent labels round to.
 #' @param plot logical where TRUE returns a gg plot object. False returns the modified data.frame from
 #'  which the gg object is constructed from. False can be used to combine datasets for "facet plotting".
 #' @param x_label character providing label for x axis
@@ -27,6 +31,7 @@ plot.edit_table <- function(this,
                             n = NULL,
                             text_size = 20,
                             perc_size = 10,
+                            perc_round = 0,
                             plot = TRUE,
                             x_label = "Mismatch type",
                             y_label = "Number of events",
@@ -85,7 +90,7 @@ plot.edit_table <- function(this,
       sapply(event_names,
              function(x) {
               cnt <- event_dat[event_dat$Event == x, "Freq"]
-              cnt_perc <- round (sum(cnt / tot_cnt) * 100, 2) %>%
+              cnt_perc <- round (sum(cnt / tot_cnt) * 100, perc_round) %>%
                             paste('%', sep = '')
               return (cnt_perc)
              })
