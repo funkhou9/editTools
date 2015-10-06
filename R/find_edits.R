@@ -95,6 +95,7 @@ find_edits <- function(file_plus,
                         "RNA_Depth",
                         "Mismatch_Depth",
                         "RNA_edit_frac",
+                        "Phred_strand_bias",
                         "Ave_MQ",
                         "Tissue")
   
