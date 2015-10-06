@@ -30,7 +30,7 @@ find_edits <- function(file_plus,
                        geno_dp = 10,
                        geno_hom = 95,
                        edit_dp = 5,
-                       edit_likelihood = 0) {
+                       edit_likelihood = 20) {
   
   # Initialize lh references to chars
   p <- "+"
