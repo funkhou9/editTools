@@ -6,7 +6,7 @@
 \usage{
 find_edits(file_plus, file_minus = NULL, names = character(),
   ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5,
-  edit_likelihood = 20)
+  edit_likelihood = 0)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
