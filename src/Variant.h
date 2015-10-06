@@ -72,6 +72,7 @@ public:
   bool depth_flag;
   bool likelihood_flag;
   double edit_frac;
+  double sb;
 
   
 public:
@@ -87,6 +88,7 @@ public:
     this->rna_pl = parse_v(rna_call[1], delim_pl);
     this->rna_dp = std::stod(rna_call[2]);
     this->rna_dv = std::stod(rna_call[3]);
+    this->sb = std::stod(rna_call[4]);
     
     this->tissue_name = tissue_name;
   }
@@ -362,7 +364,7 @@ public:
       if (it->depth_flag && it->diff_flag && it->likelihood_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << "to" << it->call << '\t' << var.dna_dp << '\t' <<
-            it->rna_dp << '\t' << it->edit_dp << '\t' << it->edit_frac << '\t' << 
+            it->rna_dp << '\t' << it->edit_dp << '\t' << it->edit_frac << '\t' << it->sb << '\t' <<
               var.ave_mq << '\t' << it->tissue_name << std::endl;
     }
     
