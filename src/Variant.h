@@ -68,9 +68,10 @@ public:
   std::string call;
   bool diff_flag;
   bool depth_flag;
-  bool likelihood_flag;
+  // bool likelihood_flag;
   double edit_frac;
   double sb;
+  bool sb_flag;
 
   
 public:
@@ -78,7 +79,7 @@ public:
   {
     this->diff_flag = false;
     this->depth_flag = false;
-    this->likelihood_flag = false;
+    // this->likelihood_flag = false;
     
     std::vector< std::string > rna_call = parse_v(line, delim_samp);
     
@@ -220,7 +221,7 @@ public:
     return (dna_dp >= depth);
   }
   
-  // Detects if Variant possesses an Rna object in rna_list where it's genotype doesn't
+  // Detects if Variant possesses an Rna object in rna_list where its genotype doesn't
   //  match the genomic sample
   void gt_diff_filter()
   {
@@ -254,33 +255,41 @@ public:
 
   // Sufficient likelihood of RNA call? Second most likely genotype call must have a phred
   //  scaled genotype likelihood greater than l.
-  void likelihood_filter(int& l)
+//   void likelihood_filter(int& l)
+//   {
+//     
+//     // Inspect likelihoods for genome
+//     int count = 0;
+//     
+//     for (std::vector< std::string >::const_iterator itp = dna_pl.begin(); itp != dna_pl.end(); itp++) {
+//       int likeli = std::stoi(*itp);
+//       if (likeli >= l)
+//         count ++;
+//     }
+//     
+//     if (count == 2)
+//       geno_likelihood_flag = true;
+//     
+//     // Inspect likelihoods for each rna sample
+//     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
+//       int count_rna = 0;
+//       
+//       for (std::vector< std::string >::const_iterator itp = it->rna_pl.begin(); itp != it->rna_pl.end(); itp++) {
+//         int likeli = std::stoi(*itp);
+//         if (likeli >= l)
+//           count_rna ++;
+//       }
+//       
+//       if (count_rna == 2)
+//         it->likelihood_flag = true;
+//     }
+//   }
+  
+  void sb_flag(int bias)
   {
-    
-    // Inspect likelihoods for genome
-    int count = 0;
-    
-    for (std::vector< std::string >::const_iterator itp = dna_pl.begin(); itp != dna_pl.end(); itp++) {
-      int likeli = std::stoi(*itp);
-      if (likeli >= l)
-        count ++;
-    }
-    
-    if (count == 2)
-      geno_likelihood_flag = true;
-    
-    // Inspect likelihoods for each rna sample
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-      int count_rna = 0;
-      
-      for (std::vector< std::string >::const_iterator itp = it->rna_pl.begin(); itp != it->rna_pl.end(); itp++) {
-        int likeli = std::stoi(*itp);
-        if (likeli >= l)
-          count_rna ++;
-      }
-      
-      if (count_rna == 2)
-        it->likelihood_flag = true;
+      if (it->sb >= bias)
+        it->sb_flag = true;
     }
   }
   
@@ -289,12 +298,9 @@ public:
   bool contains_edit()
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-      // if (it->depth_flag && it->diff_flag && it->likelihood_flag)
-      if (it->depth_flag && it->diff_flag)
-        
+      if (it->depth_flag && it->diff_flag && it->sb_flag)
         return true;
     }
-    
     return false;
   }
   
@@ -359,7 +365,7 @@ public:
   friend std::ostream& operator<<(std::ostream& os, Variant& var)
   {
     for (std::list<Rna>::iterator it = var.rna_list.begin(); it != var.rna_list.end(); it++) {
-      if (it->depth_flag && it->diff_flag && it->likelihood_flag)
+      if (it->depth_flag && it->diff_flag && it->sb_flag)
         os << var.chrom << '\t' << var.pos << '\t' << var.strand <<
           '\t' <<  var.call << "to" << it->call << '\t' << var.dna_dp << '\t' << var.dna_dv << '\t' <<
             it->rna_dp << '\t' << it->edit_dp << '\t' << it->edit_frac << '\t' << it->sb << '\t' <<

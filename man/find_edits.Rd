@@ -6,7 +6,7 @@
 \usage{
 find_edits(file_plus, file_minus = NULL, names = character(),
   ex_indel = TRUE, geno_dp = 10, geno_hom = 95, edit_dp = 5,
-  edit_likelihood = 20)
+  strand_bias = 20)
 }
 \arguments{
 \item{file_plus}{input filename for VCF file 1.}
@@ -26,10 +26,10 @@ the genotype must exhibit}
 \item{edit_dp}{integer specifying the minimum depth required for evidence of
 RNA editing}
 
-\item{qual}{An integer specifiying the minimum variant QUAL}
+\item{strand_bias}{integer specifying minimum sample Phred-scaled strand bias for an RNA sample
+to be considered.}
 
-\item{summary}{logical indicating whether a summary of found edits is returned
-or a subsetted vcf object}
+\item{qual}{An integer specifiying the minimum variant QUAL}
 }
 \value{
 an edit_summary object

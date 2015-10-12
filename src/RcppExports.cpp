@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // edit_search
-void edit_search(std::string file, char strand, CharacterVector names, bool ex_indel, int geno_dp, int geno_hom, int edit_dp, int lh);
-RcppExport SEXP editTools_edit_search(SEXP fileSEXP, SEXP strandSEXP, SEXP namesSEXP, SEXP ex_indelSEXP, SEXP geno_dpSEXP, SEXP geno_homSEXP, SEXP edit_dpSEXP, SEXP lhSEXP) {
+void edit_search(std::string file, char strand, CharacterVector names, bool ex_indel, int geno_dp, int geno_hom, int edit_dp, int bias);
+RcppExport SEXP editTools_edit_search(SEXP fileSEXP, SEXP strandSEXP, SEXP namesSEXP, SEXP ex_indelSEXP, SEXP geno_dpSEXP, SEXP geno_homSEXP, SEXP edit_dpSEXP, SEXP biasSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
@@ -17,8 +17,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type geno_dp(geno_dpSEXP);
     Rcpp::traits::input_parameter< int >::type geno_hom(geno_homSEXP);
     Rcpp::traits::input_parameter< int >::type edit_dp(edit_dpSEXP);
-    Rcpp::traits::input_parameter< int >::type lh(lhSEXP);
-    edit_search(file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh);
+    Rcpp::traits::input_parameter< int >::type bias(biasSEXP);
+    edit_search(file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, bias);
     return R_NilValue;
 END_RCPP
 }

@@ -18,8 +18,8 @@
 #'  the genotype must exhibit
 #' @param edit_dp integer specifying the minimum depth required for evidence of
 #'  RNA editing
-#' @param summary logical indicating whether a summary of found edits is returned
-#'  or a subsetted vcf object
+#' @param strand_bias integer specifying minimum sample Phred-scaled strand bias for an RNA sample
+#'  to be considered.
 #' @return an edit_summary object
 #' @import magrittr
 #' @export
@@ -30,7 +30,7 @@ find_edits <- function(file_plus,
                        geno_dp = 10,
                        geno_hom = 95,
                        edit_dp = 5,
-                       edit_likelihood = 20) {
+                       strand_bias = 20) {
   
   # Initialize lh references to chars
   p <- "+"
@@ -55,7 +55,7 @@ find_edits <- function(file_plus,
                                      geno_dp,
                                      geno_hom,
                                      edit_dp,
-                                     edit_likelihood)) %>%
+                                     strand_bias)) %>%
             sapply(function(x) strsplit(x, split = '\t')) %>%
               do.call(rbind, .) %>%
                 as.data.frame(stringsAsFactors = FALSE)
@@ -70,7 +70,7 @@ find_edits <- function(file_plus,
                                         geno_dp,
                                         geno_hom,
                                         edit_dp,
-                                        edit_likelihood)) %>%
+                                        strand_bias)) %>%
               sapply(function(x) strsplit(x, split = '\t')) %>%
                 do.call(rbind, .) %>%
                   as.data.frame(stringsAsFactors = FALSE)

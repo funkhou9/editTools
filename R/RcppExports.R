@@ -3,8 +3,8 @@
 
 #' @useDynLib editTools
 #' @importFrom Rcpp sourceCpp
-edit_search <- function(file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh) {
-    invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, lh))
+edit_search <- function(file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, bias) {
+    invisible(.Call('editTools_edit_search', PACKAGE = 'editTools', file, strand, names, ex_indel, geno_dp, geno_hom, edit_dp, bias))
 }
 
 mbym_search <- function(x, rm_file, s_chr, s_start, s_end, item_1, item_2, item_3, item_4, stranded = FALSE, s_strand = 5L) {

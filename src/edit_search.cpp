@@ -11,7 +11,7 @@ void edit_search(std::string file,
                 int geno_dp,
                 int geno_hom,
                 int edit_dp,
-                int lh)
+                int bias)
 {
   
   std::string line;
@@ -64,7 +64,8 @@ void edit_search(std::string file,
     // Flag Rna objects for evidence for editing
     Var.gt_diff_filter();
     Var.edit_depth_filter(edit_dp);
-    Var.likelihood_filter(lh);
+    Var.sb_flag(bias);
+    // Var.likelihood_filter(lh);
     
     // If Variant passes all filters, call genotypes for each sample
     //  and print
