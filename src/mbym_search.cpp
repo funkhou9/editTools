@@ -85,7 +85,7 @@ void mbym_search(CharacterMatrix& x,
       imid = imin;
       std::advance(imid, mid);
       
-      // If chromosome and position match...
+      // If chromosome matches and position is within range
       if ("chr" + vvit_query->at(1) == imid->at(s_chr) &&
          (std::stol(vvit_query->at(2)) >= std::stol(imid->at(s_start))) &&
          (std::stol(vvit_query->at(2)) <= std::stol(imid->at(s_end)))) {
@@ -105,14 +105,27 @@ void mbym_search(CharacterMatrix& x,
           Rcout << (*vvit_query) << std::endl;
           break;
         }
-        
-      } else if ("chr" + vvit_query->at(1) > imid->at(s_chr) ||
-                (std::stol(vvit_query->at(2)) > std::stol(imid->at(s_end)))) {
+      
+      // Otherwise check if chromosome is larger -> then binary search moves "up"
+      } else if ("chr" + vvit_query->at(1) > imid->at(s_chr)) {
         imin = imid++;
-        
-      } else {
+      
+      // If chromosome is the same but the position is above range -> then binary search moves "up"
+      } else if ("chr" + vvit_query->at(1) == imid->at(s_chr) &&
+                std::stol(vvit_query->at(2)) > std::stol(imid->at(s_end))) {
+        imin = imid++;
+      
+      // If chromosome is smaller -> binary search moves "down"
+      } else if ("chr" + vvit_query->at(1) < imid->at(s_chr)) {
         imax = imid--;
-      }
+      
+      // If chromosome is the same but the position is below range -> then binary search moves "down"
+      } else if ("chr" + vvit_query->at(1) == imid->at(s_chr) &&
+        std::stol(vvit_query->at(2)) < std::stol(imid->at(s_start))) {
+        imax = imid--;
+      
+      } else
+        Rcout << "ERROR!" << std::endl;
     }
   }
 }
