@@ -13,7 +13,7 @@ add_mirna <- function(this, mirna_file) {
           as.data.frame(stringsAsFactors = FALSE)
   
   # Format output - replace sequence depth data with repeatmasker data
-  mod_result <- mod_result[, c(1, 2, 3, 4, 5, 12, 13, 14, 15, 11)]
+  mod_result <- mod_result[, c(1, 2, 3, 4, 5, 14, 15, 16, 17, 13)]
   rownames(mod_result) <- NULL  
   colnames(mod_result) <- c("ID",
                             "Chr",

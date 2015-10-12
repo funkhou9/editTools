@@ -43,20 +43,18 @@ void mbym_search(CharacterMatrix& x,
                  int s_strand = 5)
 {
   
-  
-  std::vector< std::vector<std::string> > mat;
-  std::vector< std::vector<std::string> >::iterator vvit_query;
-  std::vector< std::vector<std::string> >::iterator vvit_subject;
-
-  std::vector< std::vector<std::string> > query_mat;
-  
   long l_num = 0;
-  
+  std::vector< std::vector<std::string> > mat, query_mat;
+  std::vector< std::vector<std::string> >::iterator vvit_query, imin, imax, imid;
   std::string line;
   std::ifstream rm(rm_file);
+  std::string pos1;
+  std::string pos2;
+  std::string repeat;
+  std::string family;
   
+  // Read file into 2D vector of strings
   while (getline(rm, line)) {
-    
     l_num ++;
     
     if (l_num >= 4) {
@@ -65,6 +63,7 @@ void mbym_search(CharacterMatrix& x,
     }
   }
   
+  // Convert R char matrix to 2D vector of strings
   for (int i = 0; i < x.nrow(); i++) {
     CharacterVector v = x(i, _);
     std::vector< std::string > vect_q(v.size());
@@ -72,43 +71,50 @@ void mbym_search(CharacterMatrix& x,
     for (int i = 0; i < v.size(); i++) {
       vect_q[i] = std::string(v[i]);
     }
-    
     query_mat.push_back(vect_q);
   }
   
+  // multi-tiered binary search-like approach
+  // First search for chromosome, then position for each row of query matrix
   for (vvit_query = query_mat.begin(); vvit_query != query_mat.end(); vvit_query++) {
-    for (vvit_subject = mat.begin(); vvit_subject != mat.end(); vvit_subject++) {
-    
-      if (("chr" + vvit_query->at(1)) == vvit_subject->at(s_chr) &&
-          (std::stol(vvit_query->at(2)) >= std::stol(vvit_subject->at(s_start)) &&
-          std::stol(vvit_query->at(2)) <= std::stol(vvit_subject->at(s_end)))) {
-        
-        std::string pos1 = vvit_subject->at(item_1);
-        std::string pos2 = vvit_subject->at(item_2);
-        std::string repeat = vvit_subject->at(item_3);
-        std::string family = vvit_subject->at(item_4);
-        
-        (*vvit_query).push_back(pos1);
-        (*vvit_query).push_back(pos2);
-        (*vvit_query).push_back(repeat);
-        (*vvit_query).push_back(family);
+    // Reset subject iterators
+    imin = mat.begin();
+    imax = mat.end();
+    while (std::distance(imin, imax) != 1) {
+      int mid = std::distance(imin, imax) / 2;
+      imid = imin;
+      std::advance(imid, mid);
+      
+      // If chromosome and position match...
+      if ("chr" + vvit_query->at(1) == imid->at(s_chr) &&
+         (std::stol(vvit_query->at(2)) >= std::stol(imid->at(s_start))) &&
+         (std::stol(vvit_query->at(2)) <= std::stol(imid->at(s_end)))) {
+        // Grab info from subject,
+        (*vvit_query).push_back(imid->at(item_1));
+        (*vvit_query).push_back(imid->at(item_2));
+        (*vvit_query).push_back(imid->at(item_3));
+        (*vvit_query).push_back(imid->at(item_4));
         
         if (stranded) {
-          
-          if (vvit_query->at(3) == vvit_subject->at(s_strand)) {
-    
+          if (vvit_query->at(3) == imid->at(s_strand)) {
             Rcout << (*vvit_query) << std::endl;
             break;
-          
-          } else break;
-          
+          }
         } else {
-          
+          // Then print and break
           Rcout << (*vvit_query) << std::endl;
           break;
         }
+        
+      } else if ("chr" + vvit_query->at(1) > imid->at(s_chr) ||
+                (std::stol(vvit_query->at(2)) > std::stol(imid->at(s_end)))) {
+        imin = imid++;
+        
+      } else {
+        imax = imid--;
       }
     }
   }
 }
+
 
