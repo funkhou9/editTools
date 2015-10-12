@@ -13,8 +13,8 @@ mq_filter <- function(this) {
   pe <- 10^-(ave_mq / 10)
   
   # Total rna depths and mismatch depths
-  rna_dp <- as.numeric(this$AllSites$RNA_Depth)
-  edit_dp <- as.numeric(this$AllSites$Mismatch_Depth)
+  rna_dp <- as.numeric(this$AllSites$RNA_depth)
+  edit_dp <- as.numeric(this$AllSites$RNA_Mismatch_depth)
   
   # Estimate conditional probability P(X >= x | N, p(e)) ~ Binom(N, p(e))
   1 - pbinom(edit_dp, rna_dp, pe)
