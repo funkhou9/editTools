@@ -88,6 +88,7 @@ public:
     this->rna_dp = std::stod(rna_call[2]);
     this->rna_dv = std::stod(rna_call[3]);
     this->sb = std::stod(rna_call[4]);
+    this->sb_flag = false;
     
     this->tissue_name = tissue_name;
   }
@@ -288,7 +289,7 @@ public:
   void sb_flag(int bias)
   {
     for (std::list<Rna>::iterator it = rna_list.begin(); it != rna_list.end(); it++) {
-      if (it->sb >= bias)
+      if (it->sb <= bias)
         it->sb_flag = true;
     }
   }
