@@ -59,7 +59,9 @@ void mbym_search(CharacterMatrix& x,
     
     if (l_num >= 4) {
       std::vector< std::string > rm_line = parse_r(line);
-      mat.push_back(rm_line);
+      if (rm_line.at(s_chr).find("chr") != std::string::npos) {
+        mat.push_back(rm_line);
+      }
     }
   }
   
