@@ -6,8 +6,6 @@
  *  - Provide a class to be used by editTools::edit_search()
  *    a C++ function to be used in the R interpreter
  *  
- * Note: Preprocessor directives in edit_search.cpp for easier use with
- *  Rcpp
  *  
  * Author: Scott Funkhouser <funkhou9@msu.edu>
  **********************************************************************/
