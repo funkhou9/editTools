@@ -15,8 +15,8 @@
 #' @param perc_round numeric giving decimal places that percent labels round to.
 #' @param plot logical where TRUE returns a gg plot object. False returns the modified data.frame from
 #'  which the gg object is constructed from. False can be used to combine datasets for "facet plotting".
-#' @param x_label character providing label for x axis
-#' @param y_label character providing label for y axis
+#' @param x_label character providing label for x axis. Use "none" to disable axis label.
+#' @param y_label character providing label for y axis. Use "none" to disable axis label.
 #' @param y_range numeric vector providing min and max of y axis range
 #' @param denom_all logical. If true, percentage labels will always be
 #'  out of the total number of edits found. If false, only the number of edits
@@ -160,6 +160,12 @@ plot.edit_table <- function(this,
     
     if (!legend) 
       g <- g + theme(legend.position = "none")
+    
+    if (y_label == "none")
+      g <- g + theme(axis.title.y = element_blank())
+    
+    if (x_label == "none")
+      g <- g + theme(axis.title.x = element_blank())
   }
   if (plot)
     return (g)

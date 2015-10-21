@@ -36,9 +36,9 @@ n will be grouped into "other" category}
 \item{plot}{logical where TRUE returns a gg plot object. False returns the modified data.frame from
 which the gg object is constructed from. False can be used to combine datasets for "facet plotting".}
 
-\item{x_label}{character providing label for x axis}
+\item{x_label}{character providing label for x axis. Use "none" to disable axis label.}
 
-\item{y_label}{character providing label for y axis}
+\item{y_label}{character providing label for y axis. Use "none" to disable axis label.}
 
 \item{y_range}{numeric vector providing min and max of y axis range}
 
