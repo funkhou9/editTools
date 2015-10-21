@@ -21,6 +21,7 @@
 #' @param denom_all logical. If true, percentage labels will always be
 #'  out of the total number of edits found. If false, only the number of edits
 #'  in field will be considered.
+#' @param legend logical. If false, any legend that would otherwise appear is turned off.
 #' @import ggplot2
 #' @export
 plot.edit_table <- function(this,
@@ -36,7 +37,8 @@ plot.edit_table <- function(this,
                             x_label = "Mismatch type",
                             y_label = "Number of events",
                             y_range = "auto",
-                            denom_all = FALSE) {
+                            denom_all = FALSE,
+                            legend = TRUE) {
   
   member <- this[[field]]
   
@@ -133,8 +135,6 @@ plot.edit_table <- function(this,
                         color = I("#18453B"))
     }
     
-    
-    
     g <- g + geom_text(aes(label = Total_prop),
                        na.rm = TRUE,
                        position = "stack",
@@ -143,8 +143,10 @@ plot.edit_table <- function(this,
                        size = perc_size)
     g <- g + ylab(y_label)
     g <- g + xlab(x_label)
+    
     if (y_range[1] != "auto")
       g <- g + coord_cartesian(ylim = y_range)
+    
     g <- g + theme(axis.title.x = element_text(size = text_size),
                    axis.title.y = element_text(size = text_size),
                    axis.text.x = element_text(angle = 45,
@@ -155,6 +157,9 @@ plot.edit_table <- function(this,
                    legend.title = element_text(size = text_size),
                    legend.key.height = unit(3, "line"))
     g <- g + guides(fill = guide_legend(title = "Tissues"))
+    
+    if (!legend) 
+      g <- g + theme(legend.position = "none")
   }
   if (plot)
     return (g)
