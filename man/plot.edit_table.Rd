@@ -8,7 +8,7 @@
   mismatch = "all", group = "Tissue", n = NULL, text_size = 20,
   perc_size = 10, perc_round = 0, plot = TRUE,
   x_label = "Mismatch type", y_label = "Number of events",
-  y_range = "auto", denom_all = FALSE)
+  y_range = "auto", denom_all = FALSE, legend = TRUE)
 }
 \arguments{
 \item{this}{an edit_table object}
@@ -45,6 +45,8 @@ which the gg object is constructed from. False can be used to combine datasets f
 \item{denom_all}{logical. If true, percentage labels will always be
 out of the total number of edits found. If false, only the number of edits
 in field will be considered.}
+
+\item{legend}{logical. If false, any legend that would otherwise appear is turned off.}
 }
 \description{
 A plotting tool to visualize data from an edit_frame object
