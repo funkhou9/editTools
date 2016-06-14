@@ -7,11 +7,14 @@
 1. [About](#about)
 2. [Installation](#installation)
 3. [Usage](#usage)
+  - [Input preparation](#input-preparation)
+  - [editTools run](#edittools-run)
+  - [Output R object](#output-r-object)
 4. [Future plans](#future-plans)
 
 ## About
 
-editTools was made out of the necessity to create a reproducible means to analyze RNA editing data. Candidate RNA editing detection is most often performed using scripts to analyze variant call format (VCF) data, however such scripts are rarely published leading to the possibility that variation in RNA editing results may be partly due to subtle differences in these scripts are designed. This R package provides the means to analyze VCF data using standard methodology inspired from previous studies, and do so within the R framework where powerful graphical tools can be utilized to best explore the data.
+editTools was made out of the necessity to create a reproducible means to analyze RNA editing data. Candidate RNA editing detection is most often performed using scripts to analyze variant call format (VCF) data, however such scripts are rarely published leading to the possibility that variation in RNA editing results may be partly due to subtle differences in script design. This R package provides the means to analyze VCF data using standard methodology inspired from previous studies, and do so within the R framework where powerful graphical tools can be utilized to best explore the data.
 
 From a single individual, editTools can analyze Whole genome sequencing (WGS) as well as RNAseq from any number of tissues. Input for editTools can be prepared a number of ways (allowing for differential sequencing, mapping, and variant calling techniques).
 
@@ -64,9 +67,9 @@ If two VCF files are prepared (see above), then identification of DNA-to-RNA mis
 edits <- editTools::find_edits(<plus.vcf>, <minus.vcf>, names = c("DNA", "Brain", "Liver", "Heart"))
 ```
 
-- `<plus.vcf>` &nbsp; &nbsp; VCF file containing plus-strand transcripts for each RNA sample (a character string).
-- `<minus.vcf>` &nbsp; VCF file containing minus-strand transcripts for each RNA sample (a character string).
-- `names` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Desired names for DNA and RNA samples (a character vector).
+- `<plus.vcf>` VCF file containing plus-strand transcripts for each RNA sample (a character string).
+- `<minus.vcf>` VCF file containing minus-strand transcripts for each RNA sample (a character string).
+- `names` Desired names for DNA and RNA samples (a character vector).
 
 For information on all advanced options to tweak mismatch idenfication parameters, see:
 
