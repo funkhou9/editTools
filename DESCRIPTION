@@ -4,11 +4,14 @@ Version: 2.1
 Author: Scott Funkhouser <sfunkhouser@gmail.com>
 Maintainer: Scott Funkhouser <sfunkhouser@gmail.com>
 Description: Scans bcftools output for candidate RNA editing sites.
-Depends: R (>= 3.0.0)
+Depends:
+    R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
-Suggests: testthat
-Imports: 
-  magrittr (>= 1.5),
+Suggests:
+    testthat
+Imports:
+    magrittr (>= 1.5),
     Rcpp
 LinkingTo: Rcpp
+RoxygenNote: 5.0.1
