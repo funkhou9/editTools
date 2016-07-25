@@ -10,6 +10,8 @@
   - [Input preparation](#input-preparation)
   - [editTools run](#edittools-run)
   - [Output R object](#output-r-object)
+  - [Adding RE and gene annotation](#adding-re-and-gene-annotation)
+  - [Plotting](#plotting)
 4. [Future plans](#future-plans)
 
 ## About
@@ -24,8 +26,7 @@ An example of how I prepare input for editTools can be found [here](https://gith
 
 ## Installation
 
-editTools contains compiled code and relies on the Rcpp package and C++11.
-
+> editTools contains compiled code and relies on the Rcpp package and C++11. Please note that editTools has only been tested on Mac and Linux machines and it would not be surprising if it's missing components or installation instructions needed for Windows.
 
 If using GNU version 4.7 or later, specify that you want to install editTools using C++11 with:
 
@@ -33,13 +34,14 @@ If using GNU version 4.7 or later, specify that you want to install editTools us
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 ```
 
-Otherwise, use:
+Otherwise if using an older version of the GNU, use:
 
 ```r
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++0x")
 ```
+Failure to use one of the above commands before attempting to install editTools will result in fatal compilation errors.
 
-Then install the editTools package with:
+If the `devtools` package is not already installed, then install it with `install.packages("devtools")`, then install the editTools package with:
 
 ```r
 devtools::install_github("funkhou9/editTools")
@@ -111,13 +113,55 @@ For information on all advanced options to tweak mismatch idenfication parameter
 	- `Freq` The number of events found of the specified type of mismatch
 	- `Prop` The proportion of mismatches belonging to the specified type
 
+### Adding RE and Gene Annotation
+
+Without importing data from [RepeatMasker](http://www.repeatmasker.org/) or [Variant Effect Predictor](http://useast.ensembl.org/info/docs/tools/vep/index.html), the **edit_table** object will contain no repetitive element or gene annotation, respectively. editTools facilitates the merging of **edit_table** objects with Repeatmasker genomic datasets ([example](http://www.repeatmasker.org/species/susScr.html)) or Variant effect predictor output.
+
+editTools implements a pseudo binary search approach to find the positions of each DNA-to-RNA mismatch within a repeatmasker dataset. In theory, this should allow for very large **edit_table** objects to be searched among large genomic repeatmasker datasets.
+
+To add RepeatMasker annotation to the **edit_table** object `edits`, simply use:
+
+```r
+edits <- editTools::add_repeatmask(edits, <rm.out>)
+```
+
+where `<rm.out>` is RepeatMasker output from a genomic dataset, such as the one provided in the example above.
+
+For adding gene annotation, likewise use:
+
+```r
+edits <- editTools::add_VEP(edits, <vep.out>)
+```
+where `<vep.out>` is VEP output generated from the positions of each mismatch.
+
+>To generate `<vep.out>`, input for VEP can be generated with `write_vep(edits)`
+
+>Currently VEP outputs containing the fields `Consequence`, `BIOTYPE`, `STRAND`, `SYMBOL`, `Gene`, `TREMBL`, `IMPACT`, `Amino_acids`, and `SIFT` are all required, although editTools will soon support VEP outputs containing fewer/different fields.
+
+### Plotting
+
+A number of plotting tools are included, such as an S3 method for `plot()` that can be used to generate a "DNA-to-RNA mismatch count histogram".
+
+#### Some examples (after attaching editTools with `library(editTools)`):
+
+```r
+plot(edits)
+```
+will generate a histogram showing all DNA-to-RNA mismatch types and their counts for all tissue samples studied.
+
+```r
+plot(edits, field = "RepSites")
+```
+will only construct a histogram considering mismatches within repetitive elements.
+
+Information for more plotting techniques can be found by using:
+
+```r
+edit_prop_plot(edits)
+```
+will produce a plot showing the distribution of editing levels among the dataset.
+
+
 ## Future plans
 
-1. Update this documentation with more examples on how to use `edit_table` objects.
-2. **Monumental changes to program design** - Incorporate new input types. The ability to process BAM files instead of VCF files could greatly enhance editTools ease of use. For instance, separating plus-strand alignments from minus-strand alignments would no longer be needed by the user.
-
-
-
-
-
-
+1. **Monumental changes to program design** - Incorporate new input types. The ability to process BAM files instead of VCF files could greatly enhance editTools ease of use. For instance, separating plus-strand alignments from minus-strand alignments would no longer be needed by the user. *But how would the identification of gDNA and cDNA variants be affected?*
