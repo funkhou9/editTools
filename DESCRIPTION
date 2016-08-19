@@ -9,9 +9,11 @@ Depends:
 License: MIT + file LICENSE
 LazyData: true
 Suggests:
-    testthat
+    testthat,
 Imports:
     magrittr (>= 1.5),
-    Rcpp
+    Rcpp,
+    VennDiagram,
+    grid
 LinkingTo: Rcpp
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
