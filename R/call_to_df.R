@@ -7,7 +7,8 @@ call_to_df <- function(x, names=NULL) {
   parse <- strsplit(as.character(x), ':')
   parsed_allele <- data.frame(matrix(unlist(parse),
                                      nrow = length(parse),
-                                     byrow = TRUE))
+                                     byrow = TRUE),
+                              stringsAsFactors = FALSE)
   names(parsed_allele) <- names
   return(parsed_allele)
 }
