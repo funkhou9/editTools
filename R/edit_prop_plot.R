@@ -39,8 +39,7 @@ edit_prop_plot <- function(this,
   g <- ggplot(new_df,
               aes(RNA_edit_frac, color = Mismatch))
   
-  g <- g + geom_freqpoly(fill = "transparent",
-                         size = line_size)
+  g <- g + geom_freqpoly(size = line_size)
   g <- g + ylab("Count")
   g <- g + xlab("Mismatch Proportion")
   g <- g + theme(axis.title.x = element_text(size = text_size),
