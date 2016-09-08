@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.edit_table.R
 \name{plot.edit_table}
 \alias{plot.edit_table}
-\title{A plotting tool to visualize data from an edit_frame object}
+\title{A plotting tool to visualize data from an edit_table object}
 \usage{
 \method{plot}{edit_table}(this, field = "AllSites", event = "Mismatch",
   mismatch = "all", group = "Tissue", n = NULL, text_size = 20,
@@ -49,6 +49,6 @@ in field will be considered.}
 \item{legend}{logical. If false, any legend that would otherwise appear is turned off.}
 }
 \description{
-A plotting tool to visualize data from an edit_frame object
+A plotting tool to visualize data from an edit_table object
 }
 

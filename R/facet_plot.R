@@ -53,7 +53,8 @@ facet_plot <- function(...,
                  legend.text = element_text(size = text_size),
                  legend.title = element_text(size = text_size),
                  legend.key.height = unit(3, "line"),
-                 strip.text.x = element_text(size = text_size))
+                 strip.text.x = element_text(size = text_size),
+                 text = element_text(family = "Arial"))
   g <- g + guides(fill = guide_legend(title = "Tissues"))
   g <- g + facet_wrap(~ field,
                       nrow = 1,
