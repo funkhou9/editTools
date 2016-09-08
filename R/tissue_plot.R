@@ -9,8 +9,6 @@
 #' @param mismatch character. "all" counts all mismatches. Specific mismatches
 #'  can be specified, for example "AtoG".
 #' @return NULL
-#' @import VennDiagram
-#' @import grid
 #' @export
 tissue_plot <- function(this,
                         field = "AllSites",
@@ -45,16 +43,16 @@ tissue_plot <- function(this,
   
   names(positions) <- tiss_names
   
-  venn <- venn.diagram(positions,
-                       filename = NULL,
-                       fill = fill_colors,
-                       alpha = 0.7,
-                       cat.cex = cex_labels,
-                       cex = cex_counts,
-                       cat.fontfamily = "Helvetica",
-                       sub.fontfamily = "Helvetica")
+  venn <- VennDiagram::venn.diagram(positions,
+                                    filename = NULL,
+                                    fill = fill_colors,
+                                    alpha = 0.7,
+                                    cat.cex = cex_labels,
+                                    cex = cex_counts,
+                                    cat.fontfamily = "Helvetica",
+                                    sub.fontfamily = "Helvetica")
 
   plot.new()
-  grid.draw(venn)
+  grid::grid.draw(venn)
   
 }
