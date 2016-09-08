@@ -155,8 +155,7 @@ plot.edit_table <- function(this,
                    axis.text.y = element_text(size = text_size),
                    legend.text = element_text(size = text_size),
                    legend.title = element_text(size = text_size),
-                   legend.key.height = unit(3, "line"),
-                   text = element_text(family = "Arial"))
+                   legend.key.height = unit(3, "line"))
     g <- g + guides(fill = guide_legend(title = "Tissues"))
     
     if (!legend) 
