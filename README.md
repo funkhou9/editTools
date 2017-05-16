@@ -7,11 +7,11 @@
 1. [About](#about)
 2. [Installation](#installation)
 3. [Usage](#usage)
-  - [Input preparation](#input-preparation)
-  - [editTools run](#edittools-run)
-  - [Output R object](#output-r-object)
-  - [Adding RE and gene annotation](#adding-re-and-gene-annotation)
-  - [Plotting](#plotting)
+    - [Input preparation](#input-preparation)
+    - [editTools run](#edittools-run)
+    - [Output R object](#output-r-object)
+    - [Adding RE and gene annotation](#adding-re-and-gene-annotation)
+    - [Plotting](#plotting)
 4. [Future plans](#future-plans)
 
 ## About
