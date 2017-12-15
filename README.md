@@ -66,12 +66,12 @@ where `<DNA>` corresponds to your WGS sample, and `<RNA1>`, `<RNA2>`, `<RNA3>` .
 If two VCF files are prepared (see above), then identification of DNA-to-RNA mismatches can be performed with:
 
 ```r
-edits <- editTools::find_edits(<plus.vcf>, <minus.vcf>, names = c("DNA", "Brain", "Liver", "Heart"))
+edits <- editTools::find_edits(<plus.vcf>, <minus.vcf>, names = c("Brain", "Liver", "Heart"))
 ```
 
 - `<plus.vcf>` VCF file containing plus-strand transcripts for each RNA sample (a character string).
 - `<minus.vcf>` VCF file containing minus-strand transcripts for each RNA sample (a character string).
-- `names` Desired names for DNA and RNA samples (a character vector).
+- `names` Desired names for RNA samples in the order that they appear in the VCF file (a character vector).
 
 Without supplying additional arguments, by default editTools will scan both VCF files and identify candidate RNA edited loci according to criteria largely inspired by [Chen et al. 2014](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1004274), in which a candidate RNA edited site must have:
 
