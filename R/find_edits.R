@@ -10,7 +10,7 @@
 #' @param file_plus input filename for VCF file 1.
 #' @param file_minus input filename for VCF file 2. If only one VCF file provided, it is assumed
 #'  that the RNA variants in that file all come from plus strand transcripts.
-#' @param names A character vector 
+#' @param names A character vector specifying the names of RNA samples in the order they appear in the VCF file.
 #' @param qual An integer specifiying the minimum variant QUAL
 #' @param ex_indel logical indicating whether to exclude indels from the scan
 #' @param geno_dp integer specifying the minimum genotype depth

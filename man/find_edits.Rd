@@ -14,7 +14,7 @@ find_edits(file_plus, file_minus = NULL, names = character(),
 \item{file_minus}{input filename for VCF file 2. If only one VCF file provided, it is assumed
 that the RNA variants in that file all come from plus strand transcripts.}
 
-\item{names}{A character vector}
+\item{names}{A character vector specifying the names of RNA samples in the order they appear in the VCF file.}
 
 \item{ex_indel}{logical indicating whether to exclude indels from the scan}
 
@@ -42,4 +42,3 @@ Must supply two files - one from RNA seq alignments that come from
 Each vcf file requires a genomic DNA sample (the first sample listed in the vcf file),
  along with any number of RNA samples from various tissues.
 }
-
