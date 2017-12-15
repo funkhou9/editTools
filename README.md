@@ -57,7 +57,7 @@ The only current requirement for editTools is that the input (resulting from the
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	<DNA>	<RNA1>	<RNA2>	<RNA3> ...
 ```
 
-where `<DNA>` corresponds to your WGS sample, and `<RNA1>`, `<RNA2>`, `<RNA3>` ... correspond to any number of RNA samples. Currently, the INFO field must contain `DP` and `DV` tags to represent total sequencing depth and variant depth, respectively.
+where `<DNA>` corresponds to your WGS sample, and `<RNA1>`, `<RNA2>`, `<RNA3>` ... correspond to any number of RNA samples. Currently, the FORMAT field must contain `DP` (total depth),`DV` (variant depth), and `SP` (strand-bias p-value). Steps for establishing those fields can be found [here](https://github.com/funkhou9/variant_calling_pipeline)
 
 **VCF format is (currently, to my knowledge) unaware of strand specificity. In other words, all bases reported in a VCF file correspond to the TOP strand of the genome.** This presents a challenge when calling transcriptome variants. For RNA editing discovery, this means that one cannot distinguish an A-to-G (DNA-to-RNA) mismatch from a T-to-C mismatch, since a single cDNA read will contain both the G allele and the C allele, and knowledge of which strand that cDNA read was generated from is absent from VCF files. To workaround this and have the ability to distinguish (for example) A-to-G mismatches from T-to-C mismatches, the user can prepare **two VCF files**, one containing variants on plus-strand transcripts for each `<RNA>` sample, and one containing variants on minus-strand transcripts for each `<RNA>` sample. In each case, the same `<DNA>` sample is provided.
 
