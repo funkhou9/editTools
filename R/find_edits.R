@@ -18,7 +18,7 @@
 #'  the genotype must exhibit
 #' @param edit_dp integer specifying the minimum depth required for evidence of
 #'  RNA editing
-#' @param strand_bias integer specifying minimum sample Phred-scaled strand bias for an RNA sample
+#' @param strand_bias integer specifying maximum sample Phred-scaled strand bias for an RNA sample
 #'  to be considered.
 #' @return an edit_summary object
 #' @import magrittr
@@ -77,13 +77,14 @@ find_edits <- function(file_plus,
     
     # Some df formatting -
     # 1. Combine plus strand and minus strand results
-    # 2. Ensure POS is numeric, then reorder by CHROM, then POS
+    # 2. Ensure all numeric columns are numeric (Pos, DNA_depth:Ave_MQ), then reorder by CHROM, then POS
     # 3. Remove rownames
     result <- rbind(plus, minus)
   } else
     result <- plus
 
-  # Add an "ID" column
+  # Add an "ID" column--doesn't do much. Just provides an identifier for a particular mismatch
+  # found within a particular tissue. 
   result <- cbind(seq_along(result[, 1]), result)
   
   colnames(result) <- c("ID",
@@ -101,15 +102,23 @@ find_edits <- function(file_plus,
                         "Tissue")
   
   result[, "Pos"] <- as.numeric(result[, "Pos"])
+  result[, "DNA_depth"] <- as.numeric(result[, "DNA_depth"])
+  result[, "DNA_variant_depth"] <- as.numeric(result[, "DNA_variant_depth"])
+  result[, "RNA_depth"] <- as.numeric(result[, "RNA_depth"])
+  result[, "RNA_mismatch_depth"] <- as.numeric(result[, "RNA_mismatch_depth"])
+  result[, "RNA_edit_frac"] <- as.numeric(result[, "RNA_edit_frac"])
+  result[, "Phred_strand_bias"] <- as.numeric(result[, "Phred_strand_bias"])
+  result[, "Ave_MQ"] <- as.numeric(result[, "Ave_MQ"])
   result <- result[order(result[, "Chr"], result[,"Pos"]), ]
   rownames(result) <- NULL
+  
+  # Convert columns intended to be numeric--
   
   result <- list("AllSites" = result)
 
   # Use count_mismatch() to get counts of each mismatch for each tissue
   mismatch_cnts <- count_mismatch(result$AllSites)
   
-
   # Append mismatch counts to existing results and declare class
   result <- append(result,
                    list("Tissues" = mismatch_cnts))
